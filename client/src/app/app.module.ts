@@ -7,16 +7,22 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from "@angular/material/dialog";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {SiteDialog} from './app.component';
-import { HeaderComponent } from './my-site/header/header/header.component';
+import { HeaderComponent } from './my-site/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { MySiteComponent } from './my-site/my-site.component';
+import { MyWorkComponent } from './my-work/my-work.component';
+import { HomeComponent,SiteDialogComponent } from './home/home.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    SiteDialog
+    MySiteComponent,
+    MyWorkComponent,
+    SiteDialogComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +33,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatDialogModule,
     MatButtonModule,
-    HttpClientModule
+    HttpClientModule,
+  
   ],
 
   providers: [],

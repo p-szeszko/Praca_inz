@@ -12,8 +12,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$client-primary: mat-palette($mat-indigo);
-$client-accent: mat-palette($mat-pink, A200, A100, A400);
+$client-primary: mat-palette($mat-grey,900);
+$client-accent: mat-palette($mat-light-blue);
 
 // The warn palette is optional (defaults to red).
 $client-warn: mat-palette($mat-red);
@@ -37,3 +37,7 @@ $client-theme: mat-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1{
+  color:mat-color($client-accent);
+  background:mat-color($client-primary,900);
+}
