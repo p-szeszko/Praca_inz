@@ -3,7 +3,7 @@
 
 <button mat-stroked-button color="accent" [routerLink]="['map']">{{map}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['events']">{{events}}</button>
-<button mat-stroked-button color="accent" ><a [routerLink]="['locations']"[queryParams]="{object:user | json}" >{{locations}}</a></button>
+<button mat-stroked-button color="accent" (click)="location()" >{{locations}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['eq']">{{eq}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['login']">{{login}}</button>
 

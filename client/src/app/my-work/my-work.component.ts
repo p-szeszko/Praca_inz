@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyWorkComponent implements OnInit {
 
-  user: object = {
+  user = {
     username: 'ggg',
     password: 'fff'
   };

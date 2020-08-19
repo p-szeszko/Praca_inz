@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {Router} from "@angular/router"
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -10,10 +11,13 @@ export class NavBarComponent implements OnInit {
    locations = 'Miejscówki';
    login = 'Zaloguj się';
    eq = 'Ekwipunek';
-  constructor() { }
- user = {username: 'ddd', password: ''};
+  constructor(public route: Router) { }
+ user = {username: 'ddd', password: 'ss'};
   ngOnInit(): void {
-    alert(this.user.username);
+    //alert(this.user.username);
   }
-
+location()
+{
+  this.route.navigate(['myWork/locations'], { queryParams:{user:JSON.stringify(this.user), map:this.map}, queryParamsHandling: 'merge'});
+}
 }
