@@ -30,8 +30,8 @@ export class HomeComponent implements OnInit {
 
 export class SiteDialogComponent{
   constructor(public dialogRef:MatDialogRef<SiteDialogComponent>, public route:Router) {}
-   mysitetext:string = "Strona twórcy";
-   myworktext:string = "Praca inżynierska";
+   mysitetext:string = 'Strona twórcy';
+   myworktext:string = 'Praca inżynierska';
 mySite(){
   console.log('mySite');
   this.dialogRef.close();

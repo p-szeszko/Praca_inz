@@ -1,5 +1,6 @@
 var User = require('../models/user');
 
+
 module.exports = function(router){  
 router.post('/Users',function(req,res){
     var user = new User();
@@ -8,11 +9,15 @@ router.post('/Users',function(req,res){
     user.email=req.body.email;
     user.save(function(error) {
         if(error) {
-            res.send('Username taken');
+            res.json({succes: false,message: 'Nie udało się stworzyć użytkownika' });
         }else
         res.send('user created');
     });
   
+});
+
+router.post('/authenticate', function(res,req){
+ 
 });
 return router;
 }
