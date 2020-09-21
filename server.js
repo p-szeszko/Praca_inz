@@ -8,17 +8,28 @@ var appRoutes = require('./routes/app')(router);
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var social = require('./passport/passport')(app,passport);
+var cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 
 app.use(express.static(__dirname+'/client/dist'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", '*');
+    res.header("Access-Control-Allow-Methods", 'GET,POST,PATCH,DELETE,PUT,OPTIONS');
+    res.header("Access-Control-Allow-Headers", 'Authorization, Origin, Content-Type, X-Auth-Token, content-type, Access-Control-Request-Method');
+    next();
+  });
 app.use('/api',appRoutes);
 app.get('/',(req,res) =>{
-  // return res.sendFile(path.Join(__dirname+'/client/dist/index.html'))
+ console.log(req);
   res.send('<h1>cos</h1>');
 } )
+app.get('/gl',(req,res)=>{
+return res.redirect('/auth/google');
+});
 
 mongoose.Promise=global.Promise;
 mongoose.connect('mongodb://localhost:27017/AsgApp',  { useNewUrlParser: true,useUnifiedTopology: true },function (err){

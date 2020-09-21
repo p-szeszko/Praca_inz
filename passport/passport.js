@@ -1,16 +1,20 @@
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy
 var User = require('../models/user');
-var session = require('express-session');
+const jwt = require('jsonwebtoken');
+
+
 module.exports = function(app,passport){
 
     
     app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(session({ secret: 'keyboard cat', resave: false,saveUninitialized:false,cookie:{secure:false} }));
-
+    app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", value= "*");
+      next();
+    });
+  
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
       });
       
       passport.deserializeUser(function(id, done) {
@@ -25,16 +29,36 @@ module.exports = function(app,passport){
         callbackURL: "http://localhost:3000/auth/google/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-          console.log(profile);
-        done(null,profile);
+        
+        User.findOne({googleID: profile.id}).then((currentUser)=>{
+          if(currentUser){
+            //if we already have a record with the given profile ID
+            done(null, currentUser);
+          } else{
+               //if not, create a new user 
+             new User({
+                googleID: profile._json.sub,
+                googleName:profile._json.name,
+                photo:profile._json.picture
+              }).save().then((newUser) =>{
+                
+                done(null, newUser);
+              });
+             
       }
-    ));
+     })}));
+     
     app.get('/auth/google',
-    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+    passport.authenticate('google', {session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
-  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/googleerror' }),
+  app.get('/auth/google/callback', passport.authenticate('google', {session: false, failureRedirect: '/' }),
     function(req, res) {
-      res.redirect('/');
+      console.log(req.user);
+     const token = jwt.sign({userID:req.user.googleID},'POPOLUPO',{expiresIn:'24h'} )
+     res.cookie('ASGjwt',token);
+     
+     res.redirect('http://localhost:4200/myWork');
+    
     });
     return passport;
 }
