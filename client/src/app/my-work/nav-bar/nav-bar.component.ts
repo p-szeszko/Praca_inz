@@ -8,7 +8,7 @@ import {Router} from "@angular/router"
 export class NavBarComponent implements OnInit {
    @Input('user') user;
    @Output('loginF') loginF: EventEmitter<any> = new EventEmitter<any>();
-  map = 'Mapa';
+   map = 'Mapa';
    events = 'Wydarzenia';
    locations = 'Miejscówki';
    login = 'Zaloguj się';

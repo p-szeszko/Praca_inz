@@ -8,15 +8,9 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "composite": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "target":"es5",
+    "lib":["es6","dom"]
   },
-
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-]
+  "references": []
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { LoginService } from './services/login.service';
+import {EventServiceService} from './services/event-service.service'
 import {CookieService} from 'ngx-cookie-service';
 
 
@@ -11,37 +12,31 @@ import {CookieService} from 'ngx-cookie-service';
 export class MyWorkComponent implements OnInit {
   token:String=null;
   user={userID:'Login', name:'',photo:''};
-  dat={};
+  data={};
 
 
-  constructor(private loginS: LoginService, private cookieService: CookieService ) {
-     this.token = cookieService.get("ASGjwt");
-     console.log(cookieService);
-    if(this.token)
+  constructor(private loginS: LoginService, private cookieService: CookieService, public eventS: EventServiceService ) {
+
+     this.token = cookieService.get( "ASGjwt" );
+     if(this.token)
     {
       loginS.Login(this.token).subscribe(data=>{
-        this.user=data.body;
-        console.log(data);
+        this.user = data.body;
       },e =>{cookieService.delete('ASGjwt');})
     }
     else{
       console.log("No token");
     }
-this.user=null;
+    this.user=null;
+
   }
 
-  ngOnInit(): void {
+  ngOnInit():void {
+
   }
   loginF()
-  { // fireup service to Login via Google.
-      /*this.loginS.Login().subscribe((data: any[])=>{
-        console.log(data);
-      });*/
-     // console.log('aaa');
-      //this.cookieService.set('aa','123');
-      window.location.replace("http://localhost:3000/auth/google");
-
-    //alert(json);
+  {
+    window.location.replace("http://localhost:3000/auth/google");
   }
 
 }

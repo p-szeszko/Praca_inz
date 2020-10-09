@@ -10,7 +10,7 @@ import { LocationsListComponent } from './my-work/locations-list/locations-list.
 import { EquipmentComponent } from './my-work/equipment/equipment.component';
 import { LoginComponent } from './my-work/login/login.component';
 const routes: Routes = [{path: 'mySite', component: MySiteComponent},
-{path: 'myWork', component: MyWorkComponent, children: [
+{path: '', component: MyWorkComponent, children: [
   {path: 'map', component: EventMapComponent},
   {path: 'events', component: EventListComponent},
   {path: 'locations', component: LocationsListComponent},
@@ -18,7 +18,7 @@ const routes: Routes = [{path: 'mySite', component: MySiteComponent},
   {path: 'login', component: LoginComponent},
   {path: '', component: EventMapComponent}
   ]},
- {path: '', component: HomeComponent},
+
 
  ];
 

@@ -1,3 +1,51 @@
-<p>event-map works!</p>
-<google-map></google-map>
-<div id='map'></div>
+<div class='map_div'>
+  <div id='map'></div>
+
+
+<mat-tab-group mat-align-tabs="start">
+
+  <mat-tab label="Wydarzenia" style="width: auto; height: auto;">
+    <mat-selection-list #events [(ngModel)]="selectedEvent" (ngModelChange)="onNgModelChange($event)" [multiple]="false">
+      <mat-list-option *ngFor="let ev of eventS.eventsListPaginator" [value]="ev">
+        <div style="height:fit-content">
+           {{ev.nazwa}}
+           {{ev.miejsce}}
+      </div>
+      </mat-list-option>
+    </mat-selection-list>
+    <mat-paginator #paginator
+               [length]="eventS.eventsListSearch?.length"
+               [pageSize]="10"
+               [pageSizeOptions]="[10]"
+               (page)="changePage($event)">
+
+</mat-paginator>
+<div *ngIf="eventToDisplay!=null">
+  <mat-card ngDefaultControl >
+    <mat-card-header>
+      <mat-card-title >{{eventToDisplay?.nazwa}}</mat-card-title>
+    </mat-card-header>
+      <mat-card-content style="display: inline;">
+        <div class="event-info-display">
+          <p>{{eventToDisplay.miejsce}}</p>
+          <p>{{eventToDisplay.wsp}}</p>
+          <p>{{eventToDisplay.rodzaj}}</p>
+          <p>Limity mocy:</p>
+          <div *ngFor="let limit of eventToDisplay.limity"  >
+            <p>{{limit}}</p>
+          </div>
+         <div> Liczba graczy: {{SoldiersCount(eventToDisplay)}}</div>
+         <div *ngFor="let limit of eventToDisplay.limity"  >
+          <p>{{limit}}</p>
+        </div>
+        </div>
+      </mat-card-content>
+
+  </mat-card>
+  </div>
+  </mat-tab>
+  <mat-tab label="Second">Content 2</mat-tab>
+  <mat-tab label="Nowe wydarzenie"><app-event-form></app-event-form></mat-tab>
+</mat-tab-group>
+
+

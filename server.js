@@ -10,6 +10,10 @@ var passport = require('passport');
 var social = require('./passport/passport')(app,passport);
 var cors = require('cors');
 const jwt = require('jsonwebtoken');
+const socketIO = require('socket.io');
+
+const server=express().use(app).listen(3000);
+const io=socketIO(server);
 
 
 app.use(express.static(__dirname+'/client/dist'));
@@ -40,7 +44,5 @@ mongoose.connect('mongodb://localhost:27017/AsgApp',  { useNewUrlParser: true,us
     }
 })
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log('Running the server');
-});
+
 

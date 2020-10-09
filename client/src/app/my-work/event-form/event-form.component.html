@@ -1,0 +1,33 @@
+<div><form [formGroup]="myForm">
+  Value:{{myForm.value |json }}
+  <hr>
+  <mat-form-field>
+    <input matInput placeholder="Nazwa wydarzenia" formControlName="nazwa">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Lokacja" formControlName="miejsce">
+  </mat-form-field>
+  <mat-form-field >
+    <input matInput placeholder="Data" formControlName="nazwa">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Rodzaj</mat-label>
+    <mat-select formControlName="rodzaj">
+      <mat-option value="las">Leśny</mat-option>
+      <mat-option value="CQB">CQB</mat-option>
+      <mat-option value="mieszany">Mieszany</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div formArrayName="frakcje">
+    <div *ngFor="let frakcja of frakcjeForm.controls; let i=index;" [formGroupName]="i">
+      <mat-form-field style="display:inline">
+        <input matInput placeholder={{frakcja[0]}} formControlName="strona">
+      </mat-form-field>
+      <mat-form-field style="display:inline">
+        <input matInput placeholder={{frakcja[1]}} formControlName="wielkosc">
+      </mat-form-field>
+    </div>
+  </div>
+
+</form>
+</div>

@@ -57,7 +57,7 @@ module.exports = function(app,passport){
      const token = jwt.sign({userID:req.user.googleID},'POPOLUPO',{expiresIn:'24h'} )
      res.cookie('ASGjwt',token);
      
-     res.redirect('http://localhost:4200/myWork');
+     res.redirect('http://localhost:4200');
     
     });
     return passport;

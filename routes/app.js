@@ -1,6 +1,10 @@
 var User = require('../models/user');
+var Event = require('../models/event');
+var Battlefield = require('../models/battlefield');
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
+const { deleteOne } = require('../models/user');
+const { isValidObjectId } = require('mongoose');
 
 
 module.exports = function(router){  
@@ -52,6 +56,85 @@ router.get('/user',checkToken,function(req,res){
     })
 
     
+})
+
+router.post('/event', function(req,res){
+    console.log(req.body.zapisani);
+    new Event({
+        organizator:req.body.organizator,
+    nazwa:req.body.nazwa,
+    wsp:req.body.wsp,
+    miejsce:req.body.miejsce,
+    rodzaj:req.body.rodzaj,
+    limity:req.body.limity,
+    roznica:req.body.roznica,
+    frakcje:req.body.frakcje,
+    opis:req.body.opis
+
+    }).save();
+    res.json({success:true,message:'created event'});
+})
+router.get('/event',function(req,res){
+    
+    Event.find({},function(error,result){
+        if(error)
+        console.log(error)
+        else{
+            res.json(result);
+        }
+    });
+})
+router.put('/unsignUser',function(req,res){
+    Event.updateOne({"_id":req.body._id},{$pull:{"frakcje.$[].zapisani":{"_id":req.body.gracz}}},{safe:true,multi:true},function(error,result){
+        if(error){
+            console.log(error);
+            res.json({success:false,message:"Wystąpił błąd"})
+            }
+            else{
+                res.json({success:true,message:"Wypisano z wydarzenia"});
+            }
+    })
+})
+router.put('/updateEvent',async function(req,res){
+    await Event.updateOne({_id:req.body._id},req.body,function(error,result){
+        if(error){
+        console.log(error);
+        res.json({success:false,message:"Wystąpił błąd"})
+        }
+        else{
+            res.json({success:true,message:"Wydarzenie zaaktualizowane"});
+        }
+    });
+    
+})
+
+router.put('/signUser',async function(req,res){
+    await Event.updateOne({"_id":req.body._id},{$addToSet:{"frakcje.$[s].zapisani":{_id:req.body._idGracz,imie:req.body.gracz}}},
+    {arrayFilters:[{"s.strona":req.body.strona}],upsert:true},function(error,result){
+       if(error)
+       console.log(error);
+       else{
+           if(result.nModified==0)
+           {
+               res.json({message:"Już jesteś zapisany"});
+           }
+           else{
+            res.json({message:"Zostałeś zapisany"});
+           }
+           
+       }
+})})
+
+router.delete('/deleteEvent', function(req,res){
+    Event.remove({_id:req.body._id},function(error,result){
+        if(error){
+        console.log(error);
+        res.json({success:false,message:"Wystąpił błąd"})
+        }
+        else{
+            res.json({success:true,message:"Wydarzenie usunięte"});
+        }
+    })
 })
 return router;
 }

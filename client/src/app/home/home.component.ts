@@ -28,10 +28,14 @@ export class HomeComponent implements OnInit {
   templateUrl:'./dialog.component.html'
 })
 
-export class SiteDialogComponent{
+export class SiteDialogComponent implements OnInit{
   constructor(public dialogRef:MatDialogRef<SiteDialogComponent>, public route:Router) {}
    mysitetext:string = 'Strona twórcy';
    myworktext:string = 'Praca inżynierska';
+   ngOnInit()
+   {
+    this.route.navigate(['/myWork']);
+   };
 mySite(){
   console.log('mySite');
   this.dialogRef.close();

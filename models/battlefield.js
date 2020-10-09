@@ -3,4 +3,4 @@ mongoose.Primies=global.Promise;
 var Schema = mongoose.Schema;
 var BFSchema = new Schema({},{collection: 'Battlefields'});
 
-module.exports = mongoose.Model('Battlefield', BFSchema);
+module.exports = mongoose.model('Battlefield', BFSchema);

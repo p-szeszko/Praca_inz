@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -10,8 +10,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class LoginService {
   error=false;
-  constructor(private http: HttpClient, private cookieService: CookieService,
-  @Inject(DOCUMENT) private document: Document) {
+  constructor(private http: HttpClient) {
 
    }
 

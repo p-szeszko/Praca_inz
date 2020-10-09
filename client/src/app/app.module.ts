@@ -1,10 +1,16 @@
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {  MatIconModule} from '@angular/material/icon';
+import { MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatListModule} from '@angular/material/list';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './my-site/header/header.component';
@@ -22,6 +28,12 @@ import { LoginComponent } from './my-work/login/login.component';
 import { LoginService } from './my-work/services/login.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { EventFormComponent } from './my-work/event-form/event-form.component';
+import {EventServiceService} from './my-work/services/event-service.service';
+import { CommonModule } from '@angular/common';
+import { EventInfoComponent } from './my-work/event-info/event-info.component';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -37,6 +49,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
     EquipmentComponent,
     LocationsListComponent,
     LoginComponent,
+    EventFormComponent,
+    EventInfoComponent,
 
   ],
   imports: [
@@ -48,11 +62,19 @@ import { GoogleMapsModule } from '@angular/google-maps';
     MatIconModule,
     MatDialogModule,
     MatButtonModule,
+    MatTabsModule,
     HttpClientModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatCardModule
   ],
-
-  providers: [LoginService, CookieService],
+  exports:[ReactiveFormsModule, FormsModule, CommonModule],
+  providers: [LoginService, CookieService, EventServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,4 +1,27 @@
 #map {
-  height:480px;
-  width:460px;
+  height:500px;
+  width: 80%;
+  margin:auto;
+  margin-top:5%;
+
+}
+map-div{
+  width: auto;
+  height: auto;
+}
+.mat-tab-group {
+  margin-bottom: 48px;
+  width:80%;
+  margin:auto;
+  height: fit-content;
+  margin-top:3%;
+}
+.ol-popup {
+  max-width:300px;
+  min-width:100px;
+  min-height:1em;
+}
+
+.event-info-display{
+  display:block
 }

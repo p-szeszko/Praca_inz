@@ -23,10 +23,13 @@
     "@angular/platform-browser": "~10.0.6",
     "@angular/platform-browser-dynamic": "~10.0.6",
     "@angular/router": "~10.0.6",
+    "@mapbox/maki": "^6.2.0",
     "help": "^3.0.2",
     "material": "^0.4.3",
     "ngx-cookie-service": "^10.0.1",
     "ol": "^6.4.3",
+    "ol-ext": "^3.1.15",
+    "openlayers-ext": "^3.1.5",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
