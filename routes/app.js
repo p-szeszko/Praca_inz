@@ -39,7 +39,7 @@ router.post('/authenticate', function(res,req){
  
 });
 router.get('/user',checkToken,function(req,res){
-    console.log('it works');
+    
     User.findOne({googleID:req.decoded.userID}).select('googleID googleName photo').exec((err,user)=>{
         if(err)
         {
@@ -109,8 +109,11 @@ router.put('/updateEvent',async function(req,res){
 })
 
 router.put('/signUser',async function(req,res){
-    await Event.updateOne({"_id":req.body._id},{$addToSet:{"frakcje.$[s].zapisani":{_id:req.body._idGracz,imie:req.body.gracz}}},
-    {arrayFilters:[{"s.strona":req.body.strona}],upsert:true},function(error,result){
+    console.log('bullshit');
+    console.log(req.body.params._id);
+    await Event.updateOne({"_id":req.body.params._id},{$pull:{"frakcje.$[].zapisani":{"_id":req.body.params._idGracz}}},{safe:true,multi:true});
+    await Event.updateOne({"_id":req.body.params._id},{$addToSet:{"frakcje.$[s].zapisani":{_id:req.body.params._idGracz,imie:req.body.params.gracz}}},
+    {arrayFilters:[{"s.strona":req.body.params.strona}],upsert:true},function(error,result){
        if(error)
        console.log(error);
        else{

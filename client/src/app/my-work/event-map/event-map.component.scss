@@ -1,8 +1,30 @@
+
+@import '~@angular/material/theming';
+
+@mixin event-theme($theme) {
+  $primary: map-get($theme,primary);
+  $accent: map-get($theme, accent);
+  $warn:map-get($theme,warn);
+
+  .contentBorder{
+    width: 85%;
+    margin-bottom: 5%;
+    margin:auto;
+    border-radius: 5px;
+    box-shadow:0 0 5px mat-color($accent);
+  }
+
+}
+
+
+
+
 #map {
-  height:500px;
-  width: 80%;
+  padding-top: 10px;
+  height:600px;
+  width: 90%;
   margin:auto;
-  margin-top:5%;
+  margin-top:3%;
 
 }
 map-div{
@@ -11,7 +33,7 @@ map-div{
 }
 .mat-tab-group {
   margin-bottom: 48px;
-  width:80%;
+  width:100%;
   margin:auto;
   height: fit-content;
   margin-top:3%;
@@ -22,6 +44,55 @@ map-div{
   min-height:1em;
 }
 
-.event-info-display{
-  display:block
+.tab-div{
+  width: 90%;
+  margin:auto;
+  min-height: fit-content;
+
 }
+.event-info-display{
+display:flex;
+flex-direction: row;
+justify-content: space-evenly;
+flex-wrap:wrap;
+}
+.break{
+  flex-basis:100%;
+  height:0px;
+}
+.event-title{
+font-size: 40px;
+
+line-height: 100%;
+height: fit-content;
+padding-left: 30px;
+margin:auto;
+flex-basis:100%;
+}
+
+.event-essential{
+  align-self: flex-start;
+  height:50px;
+  margin:auto;
+  padding-left: 30px;
+  flex-basis:100%;
+  font-size: 22px;
+}
+
+.event-factions{
+  margin-left: 30px;
+flex-grow:1
+}
+.event-limits{
+  padding-left: 30px;
+  flex-grow:1
+}
+.event-description{
+  flex-basis:100%;
+  min-height: fit-content;
+  padding-bottom: 20px;
+  padding-left: 30px;
+
+}
+
+

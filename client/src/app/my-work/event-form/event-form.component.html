@@ -1,33 +1,115 @@
-<div><form [formGroup]="myForm">
-  Value:{{myForm.value |json }}
-  <hr>
-  <mat-form-field>
-    <input matInput placeholder="Nazwa wydarzenia" formControlName="nazwa">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Lokacja" formControlName="miejsce">
-  </mat-form-field>
-  <mat-form-field >
-    <input matInput placeholder="Data" formControlName="nazwa">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Rodzaj</mat-label>
-    <mat-select formControlName="rodzaj">
-      <mat-option value="las">Leśny</mat-option>
-      <mat-option value="CQB">CQB</mat-option>
-      <mat-option value="mieszany">Mieszany</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div formArrayName="frakcje">
-    <div *ngFor="let frakcja of frakcjeForm.controls; let i=index;" [formGroupName]="i">
-      <mat-form-field style="display:inline">
-        <input matInput placeholder={{frakcja[0]}} formControlName="strona">
-      </mat-form-field>
-      <mat-form-field style="display:inline">
-        <input matInput placeholder={{frakcja[1]}} formControlName="wielkosc">
-      </mat-form-field>
-    </div>
-  </div>
+<div >
 
-</form>
+  <mat-horizontal-stepper  linear=false #stepper>
+    <mat-step  [stepControl]="myFormInfo" errorMessage="Informacje są wymagane.">
+      <form [formGroup]="myFormInfo">
+        <ng-template matStepLabel>Podstawowe informacje</ng-template>
+        <div >
+          <mat-grid-list cols=1 rowHeight="100px">
+            <mat-grid-tile rowSpan="1" colSpan="1">
+              <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+              <mat-form-field>
+          <mat-label>Nazwa</mat-label>
+          <input matInput formControlName="nazwa" required>
+              </mat-form-field>
+              <mat-form-field>
+          <mat-label>Data</mat-label>
+          <input matInput formControlName="termin" required>
+        </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile rowSpan="1" colSpan="1">
+          <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+          <mat-form-field>
+      <mat-label>Miejsce</mat-label>
+      <input matInput formControlName="miejsce" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Współrzędne</mat-label>
+            <input  matInput autocomplete="off" value={{coorChange()}} formControlName="wspe" required>
+          </mat-form-field>
+    </div>
+    </mat-grid-tile>
+    <mat-grid-tile rowSpan="1" colSpan="1">
+      <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+      <mat-form-field>
+  <mat-select formControlName='rodzaj' required>
+    <mat-option value="CQB">CQB</mat-option>
+    <mat-option value="Las">Las</mat-option>
+    <mat-option value="Mieszane">Mieszane</mat-option>
+  </mat-select>
+  <mat-label>Rodzaj</mat-label>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Opłata</mat-label>
+        <input type=number matInput autocomplete="off" formControlName='oplata'>
+      </mat-form-field>
+</div>
+</mat-grid-tile>
+        </mat-grid-list>
+      </div>
+      <div>
+        <button  mat-raised-button color="accent" matStepperNext>Dalej</button>
+      </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="FormFractions" errorMessage="Trzeba wprowadzić dane przynajmniej jednej grupy.">
+      <ng-template matStepLabel>Oddziały</ng-template>
+
+      <form [formGroup]="FormFractions">
+    <div formArrayName="frakcje">
+      <div *ngFor="let frakcja of frakcjeForm.controls; let i=index;" [formGroupName]="i" >
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+             <mat-form-field >
+                 <input matInput placeholder="Nazwa frakcji" formControlName='strona' required>
+              </mat-form-field>
+             <mat-form-field >
+                <input matInput type=number placeholder="Liczba miejsc" formControlName='wielkosc' required>
+             </mat-form-field>
+             <button mat-icon-button  (click)="deleteFraction(i)"> <mat-icon color="accent" >remove_circle</mat-icon></button>
+         </div>
+    </div>
+    <button mat-icon-button (click)="addFraction()" style="margin:auto"><mat-icon color="accent" >add_circle</mat-icon></button>
+    </div>
+  </form>
+  <div>
+    <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
+    <button  mat-raised-button color="accent" matStepperNext>Dalej</button>
+  </div>
+</mat-step>
+    <mat-step [stepControl]="myFormLimits" errorMessage="Informacje są wymagane.">
+      <ng-template matStepLabel>Limity FPS</ng-template>
+      <form [formGroup]="myFormLimits">
+        <div formArrayName="limity">
+          <div *ngFor="let limit of limity.controls; let i=index;" [formGroupName]="i" >
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+                <mat-form-field>
+                  <input matInput type=number placeholder="Limit FPS" formControlName="limit" >
+                  <span matSuffix>FPS</span>
+                </mat-form-field>
+
+             </div>
+        </div>
+
+        </div>
+      </form>
+      <div>
+        <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
+        <button  mat-raised-button color="accent" matStepperNext>Dalej</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="myFormDescirption" errorMessage="Dodaj opis wydarzenia.">
+      <ng-template matStepLabel>Opis</ng-template>
+      <form [formGroup]="myFormDescirption">
+        <mat-form-field>
+          <input matInput type=text placeholder="Opis wydarzenia" formControlName="opis">
+        </mat-form-field>
+      </form>
+      <div>
+        <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
+        <button  mat-raised-button color="accent" (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+
 </div>

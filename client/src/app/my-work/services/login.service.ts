@@ -10,6 +10,8 @@ import { DOCUMENT } from '@angular/common';
 })
 export class LoginService {
   error=false;
+  user={userID:'', name:'',photo:''};
+  logged=false;
   constructor(private http: HttpClient) {
 
    }

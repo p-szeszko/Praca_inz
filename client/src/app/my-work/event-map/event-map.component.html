@@ -1,15 +1,17 @@
+<div class="contentBorder">
 <div class='map_div'>
   <div id='map'></div>
 
+  <div class="tab-div">
+<mat-tab-group color="accent" mat-align-tabs="start" [selectedIndex]="selectedTab" (selectedIndexChange)="changedTabHandler($event)">
 
-<mat-tab-group mat-align-tabs="start">
-
-  <mat-tab label="Wydarzenia" style="width: auto; height: auto;">
+  <mat-tab  label="Wydarzenia" style="width: auto; height: auto;">
     <mat-selection-list #events [(ngModel)]="selectedEvent" (ngModelChange)="onNgModelChange($event)" [multiple]="false">
       <mat-list-option *ngFor="let ev of eventS.eventsListPaginator" [value]="ev">
-        <div style="height:fit-content">
-           {{ev.nazwa}}
+        <div  style="height:fit-content">
+         <h3>{{ev.nazwa}}
            {{ev.miejsce}}
+          </h3>
       </div>
       </mat-list-option>
     </mat-selection-list>
@@ -20,32 +22,30 @@
                (page)="changePage($event)">
 
 </mat-paginator>
-<div *ngIf="eventToDisplay!=null">
-  <mat-card ngDefaultControl >
-    <mat-card-header>
-      <mat-card-title >{{eventToDisplay?.nazwa}}</mat-card-title>
-    </mat-card-header>
-      <mat-card-content style="display: inline;">
-        <div class="event-info-display">
-          <p>{{eventToDisplay.miejsce}}</p>
-          <p>{{eventToDisplay.wsp}}</p>
-          <p>{{eventToDisplay.rodzaj}}</p>
-          <p>Limity mocy:</p>
-          <div *ngFor="let limit of eventToDisplay.limity"  >
-            <p>{{limit}}</p>
-          </div>
-         <div> Liczba graczy: {{SoldiersCount(eventToDisplay)}}</div>
-         <div *ngFor="let limit of eventToDisplay.limity"  >
-          <p>{{limit}}</p>
-        </div>
-        </div>
-      </mat-card-content>
 
-  </mat-card>
-  </div>
   </mat-tab>
   <mat-tab label="Second">Content 2</mat-tab>
-  <mat-tab label="Nowe wydarzenie"><app-event-form></app-event-form></mat-tab>
+  <mat-tab label="Nowe wydarzenie"><app-event-form [wsp]="wsp"></app-event-form></mat-tab>
 </mat-tab-group>
+<div *ngIf="checkIfShouldDisplay()" class="event-info-display">
+  <div class="event-title">{{eventToDisplay.nazwa}}</div>
+  <hr>
+  <div class="break"></div>
+  <div class="event-essential">Miejsce: {{eventToDisplay.miejsce}} Termin: {{eventToDisplay.termin}} Liczba uczestników: {{countPlayers()}} Opłata: {{eventToDisplay.oplata}}zł</div>
+  <div class="break" style="height: fit-content; padding-left: 30px;">Opis:</div>
+ <div class="event-description">{{eventToDisplay.opis}}</div>
+ <div class="event-factions" >
+    <div *ngIf="disabledButton(); else alreadyIn">
+      <div  *ngFor="let frakcja of eventToDisplay.frakcje" style="min-height: 35px; padding-top: 5px; vertical-align: baseline;">{{frakcja.strona}} Zapisani: {{frakcja.zapisani.length}}/{{frakcja.wielkosc}} <button mat-raised-button style="float:right; padding-right: 10px;" (click)="func(eventToDisplay._id,frakcja.strona)">Dołącz!</button> </div>
+     </div>
+     <ng-template #alreadyIn><p>Jesteś już zapisany do frakcji: {{enlistedFraction}}</p> <button mat-raised-button style="display: block; margin:auto;" (click)="unsignFromEvent(eventToDisplay._id)">Zrezygnuj</button> </ng-template>
+     </div>
+    <div class="event-limits">
+      <div  *ngFor="let limit of eventToDisplay.limity">{{limit}}</div>
+    </div>
+  </div>
 
+</div>
+</div>
+</div>
 

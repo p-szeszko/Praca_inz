@@ -11,24 +11,24 @@ import {CookieService} from 'ngx-cookie-service';
 })
 export class MyWorkComponent implements OnInit {
   token:String=null;
-  user={userID:'Login', name:'',photo:''};
+
   data={};
 
 
-  constructor(private loginS: LoginService, private cookieService: CookieService, public eventS: EventServiceService ) {
+  constructor(public loginS: LoginService, private cookieService: CookieService, public eventS: EventServiceService ) {
 
      this.token = cookieService.get( "ASGjwt" );
      if(this.token)
     {
       loginS.Login(this.token).subscribe(data=>{
-        this.user = data.body;
-      },e =>{cookieService.delete('ASGjwt');})
+        this.loginS.user = data.body;
+        this.loginS.logged=true;
+      },e =>{cookieService.delete('ASGjwt');
+    this.loginS.logged=false;})
     }
     else{
       console.log("No token");
     }
-    this.user=null;
-
   }
 
   ngOnInit():void {

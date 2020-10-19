@@ -33,7 +33,9 @@ import {EventServiceService} from './my-work/services/event-service.service';
 import { CommonModule } from '@angular/common';
 import { EventInfoComponent } from './my-work/event-info/event-info.component';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,11 @@ import {MatCardModule} from '@angular/material/card';
     MatSelectModule,
     MatListModule,
     MatPaginatorModule,
-    MatCardModule
+    MatCardModule,
+    MatGridListModule,
+    MatSnackBarModule,
+    MatStepperModule,
+    MatIconModule
   ],
   exports:[ReactiveFormsModule, FormsModule, CommonModule],
   providers: [LoginService, CookieService, EventServiceService],

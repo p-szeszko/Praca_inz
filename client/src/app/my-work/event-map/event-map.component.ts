@@ -29,6 +29,10 @@ import {fromLonLat} from 'ol/proj';
 import {EventServiceService} from '../services/event-service.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {EventASG} from '../services/event';
+import { LoginService } from '../services/login.service';
+import { Player } from '../services/player';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {loginSnackBarComponent} from '../Snackbars/loginSnackBar';
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.component.html',
@@ -49,14 +53,84 @@ export class EventMapComponent implements OnInit {
    pageEvent: PageEvent;
    selectedEvent: EventASG[] = [];
    eventToDisplay: EventASG = null;
+   enlistedFraction = '';
+   response= {message: ''};
+    selectedTab = 0;
+    wsp = '';
 
-  constructor(public eventS: EventServiceService) {
+  constructor(public eventS: EventServiceService, public loginS: LoginService, private snackBar: MatSnackBar) {
     this.eventS.getEvents().subscribe(events => {
       this.eventS.eventsList = events;
       this.eventS.eventsListSearch = events;
       this.eventS.setPaginatorList(0);
       this.addFeatures();
     });
+  }
+
+public checkIfShouldDisplay()
+{
+  if(this.eventToDisplay==null || this.loginS.logged===false || this.selectedTab==2)
+  return false;
+  else
+  return true;
+
+}
+
+public changedTabHandler(event)
+{
+  console.log(event);
+  this.selectedTab=event;
+}
+
+public disabledButton()
+{
+  for(let frakcja of this.eventToDisplay.frakcje )
+  {
+      for(const player of frakcja.zapisani)
+      {
+        if(player._id===this.loginS.user.userID)
+        {
+          this.enlistedFraction = frakcja.strona;
+          return false;
+        }
+      }
+    }
+  return true;
+}
+
+  public func(event:string, name:string)
+  {
+    this.eventS.joinFraction(event,name,this.loginS.user.userID, this.loginS.user.name).subscribe(data=>{
+      this.response=data ;
+      console.log(this.response.message);
+      this.eventS.addPlayerInClient(event,name,this.loginS.user.userID,this.loginS.user.name);
+      this.eventToDisplay=this.eventS.eventsList.find((item)=> (item._id===event));
+    }, e =>{
+      this.response=e;
+      alert(this.response.message);
+    });
+  }
+
+
+public unsignFromEvent(event:string)
+{
+  this.eventS.leaveFraction(event,this.loginS.user.userID).subscribe(data=>{
+    this.response=data;
+    alert(this.response.message);
+    this.eventS.deletePlayerInClient(event,this.enlistedFraction,this.loginS.user.userID);
+    this.eventToDisplay=this.eventS.eventsList.find((item)=> (item._id===event));
+},e=>{ this.response=e;
+  alert(this.response.message);} );
+}
+
+  public countPlayers()
+  {
+    let count=0;
+    for (let fraction of this.eventToDisplay.frakcje)
+    {
+      count+=fraction.zapisani.length;
+  }
+    return count;
   }
   public changePage(event?: PageEvent)
   {
@@ -66,8 +140,19 @@ export class EventMapComponent implements OnInit {
   {
     this.selectedEvent = event;
     if (this.selectedEvent.length > 0){
+      if(this.loginS.logged===true){
     this.eventToDisplay = this.selectedEvent[0];
-    console.log(this.eventToDisplay._id);
+    var coorString:string[]=this.eventToDisplay.wsp.split(',');
+      var coor=[];
+      coor[0]=Number(coorString[0]);
+      coor[1]=Number(coorString[1]);
+      this.map.getView().setCenter(coor);
+      this.map.getView().setZoom(10);
+      }
+      else{
+       this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
+        horizontalPosition: "center", verticalPosition: "top"})
+      }
     }
   }
   public SoldiersCount(ev: EventASG)
@@ -91,7 +176,7 @@ export class EventMapComponent implements OnInit {
         "name": "FontAwesome",
         "copyright": "SIL OFL 1.1",
         "prefix": "fa"
-      }, {"fa-warning": "\uf071", "fa-bullseye": "\uf140"});
+      }, {"fas fa-warning": "\uf071", "fas fa-crosshair": "\uf05b", "fas fa-fire":"\uf06d", "fas fa-flag":"\uf024" });
     this.popup = new Popup ({
       popupClass: "default anim", // "tooltips", "warning" "black" "default", "tips", "shadow",
       closeBox: true,
@@ -129,7 +214,7 @@ export class EventMapComponent implements OnInit {
           image: new FontStyle({
               form: 'none', //"hexagone",
               gradient: false,
-              glyph: 'fa-bullseye', //car[Math.floor(Math.random()*car.length)],
+              glyph: 'fas fa-flag',
               fontSize: 0.65,
               fontStyle: '',
               radius: 17,
@@ -187,7 +272,7 @@ export class EventMapComponent implements OnInit {
         image: new FontStyle({
             form: 'none', //"hexagone",
             gradient: false,
-            glyph: 'fa-warning', //car[Math.floor(Math.random()*car.length)],
+            glyph: 'fas fa-crosshair', //car[Math.floor(Math.random()*car.length)],
             fontSize: 0.65,
             fontStyle: '',
             radius: 17,
@@ -241,11 +326,12 @@ export class EventMapComponent implements OnInit {
         function(someFeature){ return someFeature; } // stop at the very first feature
       );
       if (feat == null){
-      var cor = olProj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-      console.log(evt.coordinate);
-      var feature = new Feature(new Point(evt.coordinate));
+      let cor = olProj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+      //console.log(evt.coordinate);
+      this.wsp = evt.coordinate;
+      let feature = new Feature(new Point(evt.coordinate));
       feature.set('i', 5);
-      console.log(evt.coordinates);
+      //console.log(evt.coordinates);
       this.vectorSource.clear();
       this.vectorSource.addFeature(feature)}} );
       //Sthis.addFeatures();

@@ -1,3 +1,5 @@
+import {Player} from './player'
+
 export class EventASG {
   _id:{};
   organizator: {_id: string, imie: string};
@@ -5,10 +7,12 @@ export class EventASG {
   termin: string;
   wsp: string;
   miejsce: string;
+  oplata: number;
   rodzaj: string;
   limity: [number];
   roznica: number;
-  frakcje: [{}];
+  frakcje: [{strona: string, wielkosc: string, zapisani: [Player]}];
   opis: string;
 
 }
+

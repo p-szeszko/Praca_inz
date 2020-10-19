@@ -4,8 +4,9 @@
 <button mat-stroked-button color="accent" [routerLink]="['events']">{{events}}</button>
 <button mat-stroked-button color="accent" (click)="location()" >{{locations}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['eq']">{{eq}}</button>
-<div stye="display: in-line" *ngIf="user==null; then thenBlock else elseBlock"></div>
+<div stye="display: in-line" *ngIf="loginS.user.userID===''; then thenBlock else elseBlock"></div>
  <ng-template #thenBlock> <button mat-stroked-button color="accent" (click)="loginFunc()">{{login}}</button></ng-template>
- <ng-template #elseBlock> <button mat-stroked-button color="accent">{{user.name}}</button></ng-template>
+ <ng-template #elseBlock> <button mat-stroked-button color="accent">{{loginS.user.name}}</button></ng-template>
+ <button mat-raised-button (click)="changeTheme()">Theme!</button>
 </mat-toolbar-row>
 </mat-toolbar>
