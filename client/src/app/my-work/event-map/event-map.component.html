@@ -24,8 +24,26 @@
 </mat-paginator>
 
   </mat-tab>
-  <mat-tab label="Second">Content 2</mat-tab>
-  <mat-tab label="Nowe wydarzenie"><app-event-form [wsp]="wsp"></app-event-form></mat-tab>
+  <mat-tab label="Moje wydarzenia"><mat-selection-list #events [(ngModel)]="selectedEvent" (ngModelChange)="onNgModelChange($event)" [multiple]="false">
+    <mat-list-option *ngFor="let ev of eventS.userEventsPaginator" [value]="ev">
+      <div  style="height:fit-content; width: 100%; display: inline-block;">
+       <h3 style="float: left">{{ev.nazwa}}
+         {{ev.miejsce}}
+        </h3>
+        <div style="width: fit-content; float: right;"*ngIf="ev.organizator._id===this.loginS.user.userID"> <button mat-raised-button (click)="setToEdit(ev)">Edytuj</button></div>
+    </div>
+
+    </mat-list-option>
+  </mat-selection-list>
+  <mat-paginator #paginator
+             [length]="eventS.userEventsPaginator.length"
+             [pageSize]="10"
+             [pageSizeOptions]="[10]"
+             (page)="changePage($event)">
+
+</mat-paginator>
+</mat-tab>
+  <mat-tab label="Nowe wydarzenie"><app-event-form [wsp]="wsp" (refreshFeatures)="refreshFeatures()" ></app-event-form></mat-tab>
 </mat-tab-group>
 <div *ngIf="checkIfShouldDisplay()" class="event-info-display">
   <div class="event-title">{{eventToDisplay.nazwa}}</div>
@@ -45,6 +63,9 @@
     </div>
   </div>
 
+</div>
+<div *ngIf="eventS.eventToEdit!==null" class="event-info-display"  >
+<app-event-editor style="width:90%;" [ev]="eventS.eventToEdit"></app-event-editor>
 </div>
 </div>
 </div>

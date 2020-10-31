@@ -14,23 +14,22 @@ import { EventServiceService } from '../services/event-service.service';
 import { first } from 'rxjs/operators';
 import { MatStepper } from '@angular/material/stepper';
 @Component({
-  selector: 'app-event-form',
-  templateUrl: './event-form.component.html',
-  styleUrls: ['./event-form.component.scss'],
+  selector: 'app-event-editor',
+  templateUrl: './event-editor.component.html',
+  styleUrls: ['./event-editor.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}
 
   },{provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}]
 })
-export class EventFormComponent implements OnInit{
-  @Input() wsp: string;
-  @Output('refreshFeatures') refreshFeatures: EventEmitter<any> = new EventEmitter<any>();
-   coord;
+export class EventEditorComponent implements OnInit{
+  @Input() ev: EventASG;
     day=new Date().getDate();
     month = new Date().getMonth()+1;
     year= new Date().getFullYear();
     minDate;
+    editedEv;
 
   myFormInfo: FormGroup;
   FormFractions: FormGroup;
@@ -42,53 +41,61 @@ export class EventFormComponent implements OnInit{
    }
 
   ngOnInit(): void {
-    console.log(this.day);
+    this.editedEv=this.ev;
+    var coordinates=this.editedEv.wsp.split(',');
+    const coor = olProj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+    const coorDigital=[];
+    coorDigital[0]=Number(coor[0]).toFixed(2);
+    coorDigital[1]=Number(coor[1]).toFixed(2);
+    let data;
+    data=this.editedEv.termin.split(',');
+
+    console.log(this.editedEv);
     this.minDate=new Date(this.year, this.month, this.day);
     console.log(this.minDate);
     this._adapter.setLocale('pl');
     this.myFormInfo = this.fb.group({
-      nazwa: ['', Validators.required],
-      miejsce: ['', Validators.required],
-      termin: [ Date, Validators.required],
-      rodzaj: ['', Validators.required],
-      wspe: ['', Validators.required],
+      nazwa: [this.editedEv.nazwa, Validators.required],
+      miejsce: [{value:this.editedEv.miejsce,disabled:true}, Validators.required],
+      termin: [ new Date(this.editedEv.termin), Validators.required],
+      rodzaj: [{value:this.editedEv.rodzaj,disabled:true}, Validators.required, ],
+      wspe: [{value: coorDigital, disabled: true}, Validators.required],
       oplata: 0,
   });
-
+    this.minDate = Date.parse(this.editedEv.termin);
     this.FormFractions = this.fb.group({
-      frakcje:this.fb.array([this.fb.group({strona:'',wielkosc:''})])
+      frakcje:this.fb.array([this.fb.group({strona:''})])
     });
+    this.addFractions();
     this.myFormLimits = this.fb.group({
-      limity:this.fb.array([this.fb.group({limit:0}),this.fb.group({limit:0}),this.fb.group({limit:0}),this.fb.group({limit:0}),this.fb.group({limit:0})])
+      limity:this.fb.array([this.fb.group({limit:0})])
     });
     this.myFormDescirption=this.fb.group({
-      opis: ['',Validators.required]
+      opis: [this.editedEv.opis,Validators.required]
     });
+    this.addLimity();
 
   }
 
-  public coorChange()
-  {
-    if (this.wsp !== ''){
-    let coor =olProj.transform(this.wsp, 'EPSG:3857', 'EPSG:4326');
-    var coorDigital=[];
-    coorDigital[0]=Number(coor[0]).toFixed(2);
-    coorDigital[1]=Number(coor[1]).toFixed(2);
-    this.myFormInfo.patchValue({wspe:coorDigital});
 
-    }
-    else
-    {
-    this.coord = '';
-
-    return '';
-  }
-  }
   get limity(){
     return this.myFormLimits.get('limity') as FormArray
   }
   get frakcjeForm(){
     return this.FormFractions.get('frakcje') as FormArray
+  }
+  addFractions(){
+    this.frakcjeForm.clear();
+    for(let frakcja of this.ev.frakcje)
+    {
+    const faction=this.fb.group({
+      strona:frakcja.strona,
+      zapisani: frakcja.zapisani,
+      wielkosc: frakcja.wielkosc,
+      otwarte: frakcja.otwarte
+    })
+    this.frakcjeForm.push(faction);
+  }
   }
   addFraction(){
     const faction=this.fb.group({
@@ -97,40 +104,54 @@ export class EventFormComponent implements OnInit{
     })
     this.frakcjeForm.push(faction);
   }
-  deleteFraction(i){
-    if(this.frakcjeForm.value.length==1)
+  addLimity()
+  {
+    this.limity.clear();
+    for(let limit of this.ev.limity)
     {
-      this.snackBar.openFromComponent(fractionsSnackBarComponent, { duration: 5000,
-        horizontalPosition: "center", verticalPosition: "top"})
+      const lim = this.fb.group({
+        limit: limit
+      })
+    this.limity.push(lim);
     }
-    else
-    this.frakcjeForm.removeAt(i);
+  }
+
+  public getZapisani(i:number): number
+  {
+    return this.ev.frakcje[i].zapisani.length;
+  }
+
+  public closeTheFraction(i, bool)
+  {
+    this.frakcjeForm.controls[i].patchValue({otwarte: bool});
   }
 
   submit()
   {
-
-
-    if(this.myFormInfo.valid && this.wsp!==''&& this.frakcjeForm.valid&& this.myFormLimits.valid && this.myFormDescirption.valid)
+    this.myFormDescirption.markAllAsTouched();
+    if(this.myFormInfo.valid && this.frakcjeForm.valid&& this.myFormLimits.valid && this.myFormDescirption.valid)
     {
     let arr: {strona:string, wielkosc:string, zapisani:Player[], otwarte: boolean}[]=[];
     for (let frakcja of this.frakcjeForm.controls)
           {
-
-            arr.push({strona:frakcja.value.strona,wielkosc:frakcja.value.wielkosc, zapisani:Player[0]=[], otwarte: true })
+            if(frakcja.value.zapisani===null)
+            {
+              arr.push({strona:frakcja.value.strona,wielkosc:frakcja.value.wielkosc, zapisani:Player[0]=[], otwarte: frakcja.value.otwarte })
+            }
+            else
+            arr.push({strona:frakcja.value.strona,wielkosc:frakcja.value.wielkosc, zapisani:frakcja.value.zapisani, otwarte: frakcja.value.otwarte })
           }
     let limits: number[]=[];
     for(let limit of this.limity.controls)
           {
             limits.push(Number(limit.value.limit));
           }
-          console.log(this.myFormInfo.value.termin.getMonth());
     let newEvent: EventASG ={
-          _id:'',
-          organizator: {_id: this.loginS.user.userID, imie: this.loginS.user.name},
+          _id:this.editedEv._id,
+          organizator: this.editedEv.organizator,
           nazwa: this.myFormInfo.value.nazwa,
-          termin: this.myFormInfo.value.termin.getFullYear()+"-"+this.myFormInfo.value.termin.getMonth()+"-"+this.myFormInfo.value.termin.getDate(),
-          wsp: String(this.wsp),
+          termin:this.myFormInfo.value.termin.getFullYear() +"-"+this.myFormInfo.value.termin.getMonth()+"-"+this.myFormInfo.value.termin.getDate(),
+          wsp: String(this.editedEv.wsp),
           miejsce: this.myFormInfo.value.miejsce,
           oplata: this.myFormInfo.value.oplata,
           rodzaj: this.myFormInfo.value.rodzaj,
@@ -139,15 +160,15 @@ export class EventFormComponent implements OnInit{
           frakcje: arr,
           opis: this.myFormDescirption.value.opis
           }
-    var to_refresh=true;
+
     console.log(newEvent);
-    this.eventS.postEvent(newEvent).pipe(first()).subscribe(data=>{
+    this.eventS.updateEvent(newEvent).pipe(first()).subscribe(data=>{
             newEvent._id=data.created_id;
             this.snackBar.openFromComponent(newEventSnackBarComponent,{duration: 5000,
             horizontalPosition: "center", verticalPosition: "top"});
             this.eventS.addEventInClient(newEvent);
-            this.refreshFeatures.emit();
-            to_refresh=false;
+            this.eventS.eventToEdit=null;
+
           });
     }
     else{
@@ -155,6 +176,7 @@ export class EventFormComponent implements OnInit{
         horizontalPosition: "center", verticalPosition: "top"});
     }
   }
+
   public markTouchedInfo(stepper: MatStepper): void
   {
     this.myFormInfo.markAllAsTouched();
@@ -178,4 +200,5 @@ export class EventFormComponent implements OnInit{
     stepper.next();
     }
   }
+
 }

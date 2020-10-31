@@ -1,13 +1,13 @@
 var mongoose=require('mongoose');
 
 var gracz={_id:'', imie:''};
-var frakcja={strona:'', wielkosc:'', zapisani:[gracz], otwarte:Boolean};
+var frakcja={strona:'', wielkosc:'', zapisani:[gracz], otwarte: Boolean};
 mongoose.Promise=global.Promise;
 var Schema = mongoose.Schema;
 var EventSchema = new Schema({
     organizator:{type:Object, required:true},
     nazwa:{type:String, required:true},
-    termin:{type:String, required:true},
+    termin:{type:Date, required:true},
     wsp:{type:String, required:true},
     oplata:{type:Number, required: true},
     miejsce:{type:String, required:true},

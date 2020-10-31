@@ -3,15 +3,18 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular
 import { Observable, throwError } from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {EventASG} from './event';
+import { IfStmt } from '@angular/compiler';
 @Injectable({
   providedIn: 'root'
 })
 export class EventServiceService {
 
-  public eventsList: EventASG[];
-  public eventsListSearch: EventASG[];
+  public eventsList: EventASG[] = [];
+  public eventsListSearch: EventASG[] = [];
   public eventsListPaginator: EventASG[] = [];
-  public forMarkers:Observable<EventASG[]>;
+  public userEvents: EventASG[] = [];
+  public userEventsPaginator: EventASG[] = [];
+  public eventToEdit: EventASG = null;
   constructor(private http: HttpClient) {
 
 
@@ -83,13 +86,71 @@ export class EventServiceService {
       }
     }
   }
+  public postEvent(event: EventASG):Observable<any>
+  {
+
+    return this.http.post('http://localhost:3000/api/event', event ).pipe(catchError(this.handleError));
+  }
+
+  public updateEvent(event: EventASG):Observable<any>
+  {
+    return this.http.put('http://localhost:3000/api/updateEvent', event).pipe(catchError(this.handleError));
+  }
   public  getEvents(){
-  const x =  this.http.get<EventASG[]>('http://localhost:3000/api/event');
+  const x =  this.http.get<EventASG[]>('http://localhost:3000/api/event').pipe(catchError(this.handleError));
   return x;
   }
   public handleError(er:HttpErrorResponse){
     return throwError('Something went wrong, try again');
   }
+  public addEventInClient(event: EventASG)
+  {
+    this.eventsList.push(event);
+    this.setPaginatorList(0);
+  }
+
+  public fillUsersEvents(user_id: string)
+  {
+    for(let ev of this.eventsList){
+
+      if(ev.organizator._id===user_id)
+      {
+        this.userEvents.push(ev);
+      }
+      else{
+        for(let fraction of ev.frakcje)
+        {
+
+            for(let player of fraction.zapisani)
+            {
+              if(player._id === user_id)
+              {
+                this.userEvents.push(ev);
+              }
+            }
+        }
+      }
+    }
+  }
+
+  public setPaginatorUsersEvents(index: number)
+  {
+    this.userEventsPaginator=[];
+    if ((index + 1) * 10 > this.userEvents.length)
+    {
+      for (let i = index * 10; i < this.userEvents.length; i++)
+      {
+        this.userEventsPaginator.push(this.userEvents[i]);
+      }
+    }
+    else{
+      for (let i = index * 10; i < (index + 1) * 10; i++)
+      {
+        this.userEventsPaginator.push(this.userEvents[i]);
+      }
+    }
+  }
+
 }
 
 

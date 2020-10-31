@@ -9,9 +9,9 @@ export class EventASG {
   miejsce: string;
   oplata: number;
   rodzaj: string;
-  limity: [number];
+  limity: number[];
   roznica: number;
-  frakcje: [{strona: string, wielkosc: string, zapisani: [Player]}];
+  frakcje: {strona: string, wielkosc: string, zapisani: Player[], otwarte: boolean}[];
   opis: string;
 
 }

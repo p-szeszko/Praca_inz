@@ -36,7 +36,10 @@ import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatStepperModule} from '@angular/material/stepper';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { EventEditorComponent } from './my-work/event-editor/event-editor.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +56,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     LoginComponent,
     EventFormComponent,
     EventInfoComponent,
+    EventEditorComponent,
+
 
   ],
   imports: [
@@ -77,7 +82,10 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatGridListModule,
     MatSnackBarModule,
     MatStepperModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule
   ],
   exports:[ReactiveFormsModule, FormsModule, CommonModule],
   providers: [LoginService, CookieService, EventServiceService],

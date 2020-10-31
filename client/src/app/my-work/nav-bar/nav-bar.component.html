@@ -2,7 +2,7 @@
 <mat-toolbar-row>
 <button mat-stroked-button color="accent" [routerLink]="['map']">{{map}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['events']">{{events}}</button>
-<button mat-stroked-button color="accent" (click)="location()" >{{locations}}</button>
+<button mat-stroked-button color="accent" [routerLink]="['locations']" >{{locations}}</button>
 <button mat-stroked-button color="accent" [routerLink]="['eq']">{{eq}}</button>
 <div stye="display: in-line" *ngIf="loginS.user.userID===''; then thenBlock else elseBlock"></div>
  <ng-template #thenBlock> <button mat-stroked-button color="accent" (click)="loginFunc()">{{login}}</button></ng-template>

@@ -12,7 +12,8 @@ module.exports = function(router){
         res.header("Access-Control-Allow-Origin", value= "*");
         next();
       });
-    const checkToken = (req, res, next) => {
+
+const checkToken = (req, res, next) => {
         const header = req.headers['authorization'];
     
         if(typeof header !== 'undefined') {
@@ -43,7 +44,7 @@ router.get('/user',checkToken,function(req,res){
     User.findOne({googleID:req.decoded.userID}).select('googleID googleName photo').exec((err,user)=>{
         if(err)
         {
-            res.json({succes:false,message:"Fucked up"});
+            res.json({succes:false,message:"Wystąpił błąd"});
         }
         else{
             if(!user)
@@ -59,7 +60,6 @@ router.get('/user',checkToken,function(req,res){
 })
 
 router.post('/event', function(req,res){
-    console.log(req.body.zapisani);
     new Event({
         organizator:req.body.organizator,
     nazwa:req.body.nazwa,
@@ -67,16 +67,26 @@ router.post('/event', function(req,res){
     miejsce:req.body.miejsce,
     rodzaj:req.body.rodzaj,
     limity:req.body.limity,
+    oplata:req.body.oplata,
+    termin:req.body.termin,
     roznica:req.body.roznica,
     frakcje:req.body.frakcje,
     opis:req.body.opis
 
-    }).save();
-    res.json({success:true,message:'created event'});
+    }).save((err, ev)=>{
+        if(err)
+        {
+            res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
+        }
+        else{
+        res.status(200).json({success:true,message:'Utworzono wydarzenie', created_id:ev._id});
+        }
+    });
+   
 })
 router.get('/event',function(req,res){
-    
-    Event.find({},function(error,result){
+    var date = new Date();
+    Event.find({"termin":{"$gte": new Date()}},function(error,result){
         if(error)
         console.log(error)
         else{
@@ -139,5 +149,54 @@ router.delete('/deleteEvent', function(req,res){
         }
     })
 })
+
+router.post('/postField',function(req,res){
+    new Battlefield({
+        nazwa: req.body.nazwa,
+        adres: req.body.adres,
+        wsp: req.body.wsp,
+        opis: req.body.opis
+    }).save((err,ev)=>{
+        if(err)
+        {
+            res.status(500).json({message:"Błąd dodania lokacji", success: false, id: ev._id})
+        }
+        else
+        {
+            res.status(200).json({message:"Dodano wydarzenie", success: true, id:ev._id})
+        }
+    })
+} )
+
+router.get('/getFields', function(req,res){
+    Battlefield.find({},function(error,result){
+        if(error)
+            res.status(500).json({message:"Nie udało się pobrać lokacji"})
+        else{
+            res.status(200).json(result);
+        }
+    });
+})
+
+router.post('/postField', function(req,res){
+    new Battlefield({
+        nazwa: req.body.nazwa,
+        adres: req.body.adres,
+        wsp: req.body.wsp,
+        opis: req.body.opis
+    }).save((err, field)=>{
+        if(err)
+        {
+            res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
+        }
+        else{
+        res.status(200).json({success:true,message:'Utworzono wydarzenie', created_id:field._id});
+        }
+    });
+})
+
 return router;
+
+
+
 }

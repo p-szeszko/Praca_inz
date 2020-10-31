@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { LoginService } from './services/login.service';
 import {EventServiceService} from './services/event-service.service'
 import {CookieService} from 'ngx-cookie-service';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -20,9 +21,10 @@ export class MyWorkComponent implements OnInit {
      this.token = cookieService.get( "ASGjwt" );
      if(this.token)
     {
-      loginS.Login(this.token).subscribe(data=>{
+      loginS.Login(this.token).pipe(first()).subscribe(data=>{
         this.loginS.user = data.body;
         this.loginS.logged=true;
+
       },e =>{cookieService.delete('ASGjwt');
     this.loginS.logged=false;})
     }

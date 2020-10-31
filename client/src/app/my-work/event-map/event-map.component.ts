@@ -33,6 +33,7 @@ import { LoginService } from '../services/login.service';
 import { Player } from '../services/player';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {loginSnackBarComponent} from '../Snackbars/loginSnackBar';
+import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.component.html',
@@ -59,10 +60,15 @@ export class EventMapComponent implements OnInit {
     wsp = '';
 
   constructor(public eventS: EventServiceService, public loginS: LoginService, private snackBar: MatSnackBar) {
-    this.eventS.getEvents().subscribe(events => {
+    this.eventS.getEvents().pipe(first()).subscribe(events => {
       this.eventS.eventsList = events;
       this.eventS.eventsListSearch = events;
       this.eventS.setPaginatorList(0);
+      if(this.loginS.logged===true)
+      {
+        this.eventS.fillUsersEvents(this.loginS.user.userID);
+        this.eventS.setPaginatorUsersEvents(0);
+      }
       this.addFeatures();
     });
   }
@@ -353,7 +359,30 @@ addFeatures(){
     this.clusterSource.getSource().addFeatures(features);
 
   }
+refreshFeatures()
+{
+  var ext = this.map.getView().calculateExtent(this.map.getSize());
+  var features = [];
+  for (let ev of this.eventS.eventsList){
+    var coorString:string[]=ev.wsp.split(',');
+    var coor=[];
+    coor[0]=Number(coorString[0]);
+    coor[1]=Number(coorString[1]);
+    var feature = new Feature(new Point(coor));
+    feature.set('id', ev._id);
+    features.push(feature)
+  }
+  this.clusterSource.getSource().clear();
+  console.log('here refresh');
+  this.clusterSource.getSource().addFeatures(features);
+}
 
+public setToEdit(ev)
+{
+  this.eventToDisplay = null;
+  this.eventS.eventToEdit = ev;
+  console.log(this.eventS.eventToEdit);
+}
 
 
 }
