@@ -11,6 +11,8 @@ import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
 import XyzSource from 'ol/source/XYZ';
+import Toggle from 'ol-ext/control/toggle'
+import OverlayMenu from 'ol-ext/control/Overlay'
 import Style from 'ol/style/Style';
 import Circle from 'ol/style/Circle';
 import Text from 'ol/style/Text';
@@ -36,13 +38,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {loginSnackBarComponent} from '../Snackbars/loginSnackBar';
 import { first } from 'rxjs/operators';
 import { LocationsService } from '../services/locations.service';
+import { DOCUMENT } from '@angular/common';
+import { Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Location} from '../services/location';
 @Component({
   selector: 'app-locations-list',
   templateUrl: './locations-list.component.html',
   styleUrls: ['./locations-list.component.scss']
 })
 export class LocationsListComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private loginS: LoginService, private locationS: LocationsService) {
+
+  constructor(private route: ActivatedRoute, private loginS: LoginService, private locationS: LocationsService,
+     @Inject(DOCUMENT) document, private fb: FormBuilder) {
     this.locationS.getFields().pipe(first()).subscribe(fields =>{
       this.locationS.fieldsList=fields;
       this.addFeatures();
@@ -50,6 +58,7 @@ export class LocationsListComponent implements OnInit {
 
 
    }
+  coord;
   map;
   marker: Feature;
   vectorSource;
@@ -61,9 +70,16 @@ export class LocationsListComponent implements OnInit {
   popup;
   clusterSource;
   locationsToDisplay;
-  wsp;
+  wsp='';
+  locationForm : FormGroup;
   ngOnInit(): void {
     this.initMap();
+    this.locationForm=this.fb.group({
+      nazwa:['', Validators.required],
+      adres: [ '', Validators.required],
+      wspe: ['', Validators.required],
+      opis:['',Validators.required]
+    })
   }
 
 
@@ -74,7 +90,7 @@ export class LocationsListComponent implements OnInit {
         "name": "FontAwesome",
         "copyright": "SIL OFL 1.1",
         "prefix": "fa"
-      }, {"fas fa-warning": "\uf071", "fas fa-crosshair": "\uf05b", "fas fa-fire":"\uf06d", "fas fa-flag":"\uf024" });
+      }, {"fas fa-warning": "\uf071", "fas fa-crosshair": "\uf05b", "fas fa-fire":"\uf06d", "fas fa-flag":"\uf024", "fa-plus-circle":"\uf055" });
     this.popup = new Popup ({
       popupClass: "default anim", // "tooltips", "warning" "black" "default", "tips", "shadow",
       closeBox: true,
@@ -98,6 +114,24 @@ export class LocationsListComponent implements OnInit {
       }),
       overlays: [this.popup]
     });
+    // Overlay
+	   var menu = new OverlayMenu ({
+		closeBox : true,
+		className: 'slide-left mymenu',
+		content: document.getElementById('menu')
+	});
+	   this.map.addControl(menu);
+
+	// A toggle control to show/hide the menu
+	   var t = new Toggle(
+			{	html: document.getElementById('addicon'),
+				className: 'toggle',
+        title: 'Dodaj lokacje',
+				onToggle: function() { menu.toggle(); }
+      });
+
+      console.log(t.getButtonElement().contorl);
+    this.map.addControl(t);
 
     var styleCache = {};
     function getStyle(feature, resolution){
@@ -223,12 +257,18 @@ export class LocationsListComponent implements OnInit {
         function(someFeature){ return someFeature; } // stop at the very first feature
       );
       if (feat == null){
-      let cor = olProj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+      //let cor = olProj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
       //console.log(evt.coordinate);
       this.wsp = evt.coordinate;
       let feature = new Feature(new Point(evt.coordinate));
       feature.set('i', 5);
       //console.log(evt.coordinates);
+      let coor =olProj.transform(this.wsp, 'EPSG:3857', 'EPSG:4326');
+      var coorDigital=[];
+      coorDigital[0]=Number(coor[0]).toFixed(2);
+      coorDigital[1]=Number(coor[1]).toFixed(2);
+      this.locationForm.patchValue({wspe:coorDigital});
+
       this.vectorSource.clear();
       this.vectorSource.addFeature(feature)}} );
       //Sthis.addFeatures();
@@ -263,8 +303,33 @@ export class LocationsListComponent implements OnInit {
      feature.set('id', ev._id);
      features.push(feature)
     }
-    this.clusterSource.getSource().clear();
-    this.clusterSource.getSource().addFeatures(features);
+   this.clusterSource.getSource().clear();
+   this.clusterSource.getSource().addFeatures(features);
   }
 
+  submit()
+  {
+    this.locationForm.markAllAsTouched();
+    if(this.locationForm.valid===true)
+    {
+      var newLocation: Location=
+      {
+        _id: '',
+        nazwa: this.locationForm.value.nazwa,
+        adres: this.locationForm.value.adres,
+        wsp: String(this.wsp),
+        opis: this.locationForm.value.opis
+      };
+
+      this.locationS.postField(newLocation).pipe(first()).subscribe(data=> {
+        newLocation._id=data.created_id;
+        this.locationS.fieldsList.push(newLocation);
+        //snackBar
+        this.refreshFeatures();
+      })
+
+
+
+    }
+  }
 }

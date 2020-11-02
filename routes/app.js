@@ -27,6 +27,7 @@ const checkToken = (req, res, next) => {
                 }
                 else{
                     req.decoded=decoded;
+                   // console.log(req.decoded);
                     next();
                 }
             })
@@ -74,7 +75,7 @@ router.post('/event', function(req,res){
     opis:req.body.opis
 
     }).save((err, ev)=>{
-        if(err)
+        if(err===true)
         {
             res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
         }
@@ -150,23 +151,6 @@ router.delete('/deleteEvent', function(req,res){
     })
 })
 
-router.post('/postField',function(req,res){
-    new Battlefield({
-        nazwa: req.body.nazwa,
-        adres: req.body.adres,
-        wsp: req.body.wsp,
-        opis: req.body.opis
-    }).save((err,ev)=>{
-        if(err)
-        {
-            res.status(500).json({message:"Błąd dodania lokacji", success: false, id: ev._id})
-        }
-        else
-        {
-            res.status(200).json({message:"Dodano wydarzenie", success: true, id:ev._id})
-        }
-    })
-} )
 
 router.get('/getFields', function(req,res){
     Battlefield.find({},function(error,result){
@@ -190,7 +174,8 @@ router.post('/postField', function(req,res){
             res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
         }
         else{
-        res.status(200).json({success:true,message:'Utworzono wydarzenie', created_id:field._id});
+            console.log(field);
+        res.status(200).json({success:true,message:'Utworzono lokację', created_id: field._id});
         }
     });
 })

@@ -82,7 +82,7 @@ export class EventFormComponent implements OnInit{
     this.coord = '';
 
     return '';
-  }
+    }
   }
   get limity(){
     return this.myFormLimits.get('limity') as FormArray
