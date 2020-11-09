@@ -1,1 +1,107 @@
-<p>equipment works!</p>
+<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+<div class="sideNav">
+<mat-tab-group style="margin: 0px;">
+  <mat-tab label="Repliki" >
+    <div matRipple *ngFor="let weapon of this.eqS.weaponsList" style="min-height: 50px; min-width: 100%; text-align: center;">{{weapon.nazwa}} <mat-divider></mat-divider></div>
+    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addWeapon()">add_circle</mat-icon>
+  </mat-tab>
+  <mat-tab label="Oporządzenie">
+    <div matRipple *ngFor="let item of this.eqS.itemsList" style="min-height: 50px; min-width: 100%; text-align: center;">{{item.nazwa}} <mat-divider></mat-divider></div>
+    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addItem()">add_circle</mat-icon>
+  </mat-tab>
+  <mat-tab label="Dodatki">
+    <div matRipple *ngFor="let accesory of this.eqS.accesoriesList" style="min-height: 50px; min-width: 100%; text-align: center;">{{accesory.nazwa}} <mat-divider></mat-divider></div>
+    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addAccesory()">add_circle</mat-icon>
+  </mat-tab>
+</mat-tab-group>
+</div>
+
+<div style="width: 80%; text-align:center; ">
+
+<div *ngIf="showNewW!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
+    <mat-card style="width: 80%; height: 40vh; margin: auto;"  #weapon>
+      <form [formGroup]="weaponForm" >
+      <mat-card-header>
+        <mat-card-title>
+        <mat-form-field>
+          <mat-label>Nazwa</mat-label>
+          <input matInput formControlName="nazwa">
+        </mat-form-field>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <mat-form-field>
+
+          <mat-select formControlName="rodzaj">
+          <mat-option value="Karabin snajperski">Karabin snajperski</mat-option>
+          <mat-option value="Karabin wyborowy">Karabin wyborowy</mat-option>
+          <mat-option value="Karabin maszynowy">Karabin maszynowy</mat-option>
+          <mat-option value="Karabin szturmowy">Karabin szturmowy</mat-option>
+          <mat-option value="istolet maszynowy">Pistolet maszynowy</mat-option>
+          <mat-option value="Broń boczna">Broń boczna</mat-option>
+        </mat-select>
+        <mat-label>Rodzaj</mat-label>
+        </mat-form-field>
+      </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field>
+          <mat-label>FPS</mat-label>
+        <input type="number" matInput formControlName="fps">
+      </mat-form-field>
+      <mat-form-field >
+        <mat-label>RoF</mat-label>
+        <input type="number" matInput formControlName="rof">
+      </mat-form-field>
+      <mat-form-field>
+          <mat-label>Zasięg skuteczny</mat-label>
+          <input matInput type="number" formControlName="skuteczny">
+      </mat-form-field>
+      <mat-form-field style="display: block;">
+        <mat-label>Dodatkowy opis</mat-label>
+        <textarea style="display: block; min-height: 100px;" matInput formControlName="opis">
+        </textarea>
+      </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions >
+        <button mat-raised-button color="accent" *ngIf="showNewW===true"  style="float: right;" (click)="submitNewWeapon()">Dodaj </button>
+        <button mat-raised-button color="accent" *ngIf="showNewW===false" style="float: right;">Zapisz</button>
+
+      </mat-card-actions>
+    </form>
+    </mat-card>
+
+</div>
+
+<div *ngIf="showNewI!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
+<mat-card style="width: 80%; height: 40vh; margin: auto;"  #item>
+  <form >
+  <mat-card-header>
+    <mat-form-field>
+      <mat-label>Label</mat-label>
+      <input matInput >
+    </mat-form-field>
+  </mat-card-header>
+  <mat-card-content>
+
+  </mat-card-content>
+  <mat-card-actions>
+
+  </mat-card-actions>
+</form>
+</mat-card>
+</div>
+<div *ngIf="showNewA!=null">
+<mat-card  #accesory>
+  <mat-card-header>
+
+  </mat-card-header>
+  <mat-card-content>
+
+  </mat-card-content>
+  <mat-card-actions>
+
+  </mat-card-actions>
+</mat-card>
+</div>
+</div>
+</div>

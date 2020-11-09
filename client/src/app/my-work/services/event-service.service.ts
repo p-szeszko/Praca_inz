@@ -39,6 +39,7 @@ export class EventServiceService {
   }
   public  joinFraction(event:string, faction:string, user:string, name:string):Observable<any>
   {
+    //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const options = {_id:event, strona:faction, _idGracz:user, gracz:name}
     const header = new Headers();
     header.append('Content-Type','application/json; charset=utf-8');
@@ -49,8 +50,9 @@ export class EventServiceService {
      );
   }
   public leaveFraction(event:string, player:string):Observable<any>{
+    //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const data= {_id:event, gracz: player};
-    return this.http.put('http://localhost:3000/api/unsignUser',data ).pipe(catchError(this.handleError));
+    return this.http.put('http://localhost:3000/api/unsignUser', data ).pipe(catchError(this.handleError));
   }
 
   public addPlayerInClient(event: string, side:string, _idGracz: string, name: string)
@@ -88,17 +90,25 @@ export class EventServiceService {
   }
   public postEvent(event: EventASG):Observable<any>
   {
-
+//const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     return this.http.post('http://localhost:3000/api/event', event ).pipe(catchError(this.handleError));
   }
 
   public updateEvent(event: EventASG):Observable<any>
   {
+    //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     return this.http.put('http://localhost:3000/api/updateEvent', event).pipe(catchError(this.handleError));
   }
   public  getEvents(){
+    //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
   const x =  this.http.get<EventASG[]>('http://localhost:3000/api/event').pipe(catchError(this.handleError));
   return x;
+  }
+
+  deleteEvent(id:string){
+    const options = {_id:id};
+    //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
+  return  this.http.delete('http://localhost:3000/api/deleteEvent', {params: options}).pipe(catchError(this.handleError));
   }
   public handleError(er:HttpErrorResponse){
     return throwError('Something went wrong, try again');

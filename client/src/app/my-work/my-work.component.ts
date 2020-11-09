@@ -21,10 +21,10 @@ export class MyWorkComponent implements OnInit {
      this.token = cookieService.get( "ASGjwt" );
      if(this.token)
     {
-      loginS.Login(this.token).pipe(first()).subscribe(data=>{
+
+      this.loginS.Login(this.token).pipe(first()).subscribe(data=>{
         this.loginS.user = data.body;
         this.loginS.logged=true;
-
       },e =>{cookieService.delete('ASGjwt');
     this.loginS.logged=false;})
     }

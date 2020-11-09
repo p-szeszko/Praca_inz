@@ -9,8 +9,7 @@ import { LoginService } from '../services/login.service';
 })
 export class NavBarComponent implements OnInit {
    @Output('loginF') loginF: EventEmitter<any> = new EventEmitter<any>();
-   map = 'Mapa';
-   events = 'Wydarzenia';
+   map = 'Wydarzenia';
    locations = 'Miejscówki';
    login = 'Zaloguj się';
    eq = 'Ekwipunek';

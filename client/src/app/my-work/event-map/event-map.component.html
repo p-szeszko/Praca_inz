@@ -13,6 +13,7 @@
            {{ev.miejsce}}
           </h3>
       </div>
+      <mat-divider></mat-divider>
       </mat-list-option>
     </mat-selection-list>
     <mat-paginator #paginator
@@ -22,8 +23,8 @@
                (page)="changePage($event)">
 
 </mat-paginator>
-
   </mat-tab>
+  <div *ngIf="this.loginS.logged===true">
   <mat-tab label="Moje wydarzenia"><mat-selection-list #events [(ngModel)]="selectedEvent" (ngModelChange)="onNgModelChange($event)" [multiple]="false">
     <mat-list-option *ngFor="let ev of eventS.userEventsPaginator" [value]="ev">
       <div  style="height:fit-content; width: 100%; display: inline-block;">
@@ -31,8 +32,8 @@
          {{ev.miejsce}}
         </h3>
         <div style="width: fit-content; float: right;"*ngIf="ev.organizator._id===this.loginS.user.userID"> <button mat-raised-button (click)="setToEdit(ev)">Edytuj</button></div>
-    </div>
-
+      </div>
+      <mat-divider></mat-divider>
     </mat-list-option>
   </mat-selection-list>
   <mat-paginator #paginator
@@ -44,8 +45,11 @@
 </mat-paginator>
 </mat-tab>
   <mat-tab label="Nowe wydarzenie"><app-event-form [wsp]="wsp" (refreshFeatures)="refreshFeatures()" ></app-event-form></mat-tab>
+</div>
 </mat-tab-group>
+
 <div *ngIf="checkIfShouldDisplay()" class="event-info-display">
+  <mat-divider></mat-divider>
   <div class="event-title">{{eventToDisplay.nazwa}}</div>
   <hr>
   <div class="break"></div>
@@ -54,12 +58,16 @@
  <div class="event-description">{{eventToDisplay.opis}}</div>
  <div class="event-factions" >
     <div *ngIf="disabledButton(); else alreadyIn">
-      <div  *ngFor="let frakcja of eventToDisplay.frakcje" style="min-height: 35px; padding-top: 5px; vertical-align: baseline;">{{frakcja.strona}} Zapisani: {{frakcja.zapisani.length}}/{{frakcja.wielkosc}} <button mat-raised-button style="float:right; padding-right: 10px;" (click)="func(eventToDisplay._id,frakcja.strona)">Dołącz!</button> </div>
+      <div  *ngFor="let frakcja of eventToDisplay.frakcje" style="min-height: 35px; padding-top: 5px; vertical-align: baseline;">
+        {{frakcja.strona}} Zapisani: {{frakcja.zapisani.length}}/{{frakcja.wielkosc}}
+         <button mat-raised-button style="float:right; padding-right: 10px;" (click)="func(eventToDisplay._id,frakcja.strona)">Dołącz!</button>
+         <mat-divider></mat-divider>
+        </div>
      </div>
      <ng-template #alreadyIn><p>Jesteś już zapisany do frakcji: {{enlistedFraction}}</p> <button mat-raised-button style="display: block; margin:auto;" (click)="unsignFromEvent(eventToDisplay._id)">Zrezygnuj</button> </ng-template>
      </div>
     <div class="event-limits">
-      <div  *ngFor="let limit of eventToDisplay.limity">{{limit}}</div>
+      <div  *ngFor="let limit of eventToDisplay.limity">{{limit}} <mat-divider></mat-divider> </div>
     </div>
   </div>
 

@@ -21,7 +21,6 @@ import { MyWorkComponent } from './my-work/my-work.component';
 import { HomeComponent, SiteDialogComponent } from './home/home.component';
 import { EventMapComponent } from './my-work/event-map/event-map.component';
 import { NavBarComponent } from './my-work/nav-bar/nav-bar.component';
-import { EventListComponent } from './my-work/event-list/event-list.component';
 import { EquipmentComponent } from './my-work/equipment/equipment.component';
 import { LocationsListComponent } from './my-work/locations-list/locations-list.component';
 import { LoginComponent } from './my-work/login/login.component';
@@ -31,7 +30,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { EventFormComponent } from './my-work/event-form/event-form.component';
 import {EventServiceService} from './my-work/services/event-service.service';
 import { CommonModule } from '@angular/common';
-import { EventInfoComponent } from './my-work/event-info/event-info.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -40,6 +38,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EventEditorComponent } from './my-work/event-editor/event-editor.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatSidenavModule} from '@angular/material/sidenav';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,12 +50,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     HomeComponent,
     EventMapComponent,
     NavBarComponent,
-    EventListComponent,
     EquipmentComponent,
     LocationsListComponent,
     LoginComponent,
     EventFormComponent,
-    EventInfoComponent,
     EventEditorComponent,
 
 
@@ -85,7 +83,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDividerModule,
+    MatSidenavModule
   ],
   exports:[ReactiveFormsModule, FormsModule, CommonModule],
   providers: [LoginService, CookieService, EventServiceService],

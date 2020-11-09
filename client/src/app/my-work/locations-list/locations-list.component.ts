@@ -42,6 +42,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Location} from '../services/location';
+
 @Component({
   selector: 'app-locations-list',
   templateUrl: './locations-list.component.html',
@@ -50,7 +51,7 @@ import {Location} from '../services/location';
 export class LocationsListComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private loginS: LoginService, private locationS: LocationsService,
-     @Inject(DOCUMENT) document, private fb: FormBuilder) {
+     @Inject(DOCUMENT) document, private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.locationS.getFields().pipe(first()).subscribe(fields =>{
       this.locationS.fieldsList=fields;
       this.addFeatures();
@@ -60,6 +61,7 @@ export class LocationsListComponent implements OnInit {
    }
   coord;
   map;
+  menu;
   marker: Feature;
   vectorSource;
   vectorLayer;
@@ -115,19 +117,19 @@ export class LocationsListComponent implements OnInit {
       overlays: [this.popup]
     });
     // Overlay
-	   var menu = new OverlayMenu ({
+	    this.menu = new OverlayMenu ({
 		closeBox : true,
 		className: 'slide-left mymenu',
 		content: document.getElementById('menu')
 	});
-	   this.map.addControl(menu);
+	   this.map.addControl(this.menu);
 
 	// A toggle control to show/hide the menu
 	   var t = new Toggle(
 			{	html: document.getElementById('addicon'),
 				className: 'toggle',
         title: 'Dodaj lokacje',
-				onToggle: function() { menu.toggle(); }
+        onToggle: () => this.showMenu()
       });
 
       console.log(t.getButtonElement().contorl);
@@ -327,9 +329,13 @@ export class LocationsListComponent implements OnInit {
         //snackBar
         this.refreshFeatures();
       })
-
-
-
     }
+  }
+  showMenu() {
+    if(this.loginS.logged===true)
+    this.menu.toggle();
+    else
+    this.snackBar.openFromComponent(loginSnackBarComponent,{ duration: 5000,
+      horizontalPosition: "center", verticalPosition: "top"});
   }
 }

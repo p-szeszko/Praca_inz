@@ -7,19 +7,30 @@
   $accent: map-get($theme, accent);
   $warn:map-get($theme,warn);
 
-  .contentBorder{
-    width: 85%;
-    margin-bottom: 5%;
-    margin:auto;
-    border-radius: 5px;
-    box-shadow:0 0 5px mat-color($accent);
-  }
+
   .ol-control button{
     background-color: mat-color($accent);
   }
  .ol-control button:hover{
     background-color: mat-color($accent);
+    cursor: pointer;
+
   }
+  .ol-control:active{
+    border-style: none;
+  }
+  .toggle.ol-control button{
+    background-color: transparent;
+  }
+
+  .iconSize:active{
+    color: mat-color($accent, A400);
+  }
+  .iconSize:hover{
+    color: mat-color($accent, A400);
+  }
+
+
 }
 
 .mymenu{
@@ -33,6 +44,9 @@
 .toggle{
   left: 8px;
   top:8px;
+  background-color: transparent !IMPORTANT;
+}
+.dark-theme .toggle {
   background-color: transparent;
 }
 .toggle:hover{
@@ -58,9 +72,7 @@
   right:8px;
 }
 
-.toggle.ol-control button{
-  background-color: transparent;
-}
+
 .toggle.ol-control button:hover{
   background-color: transparent;
 }
