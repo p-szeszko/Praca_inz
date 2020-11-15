@@ -2,15 +2,21 @@
 <div class="sideNav">
 <mat-tab-group style="margin: 0px;">
   <mat-tab label="Repliki" >
-    <div matRipple *ngFor="let weapon of this.eqS.weaponsList" style="min-height: 50px; min-width: 100%; text-align: center;">{{weapon.nazwa}} <mat-divider></mat-divider></div>
+    <div  *ngFor="let weapon of this.eqS.weaponsList;  let i=index"  style=" min-width: 100%; text-align: center; margin: auto; "><div style="display: flex; justify-content: space-around;">
+      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingWeapon(i)">{{weapon.nazwa}}</div>
+    <mat-icon  color="accent" (click)="deleteWeapon(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
     <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addWeapon()">add_circle</mat-icon>
   </mat-tab>
   <mat-tab label="Oporządzenie">
-    <div matRipple *ngFor="let item of this.eqS.itemsList" style="min-height: 50px; min-width: 100%; text-align: center;">{{item.nazwa}} <mat-divider></mat-divider></div>
+    <div matRipple *ngFor="let item of this.eqS.itemsList; let i=index" style="min-height: 50px; min-width: 100%; text-align: center;"><div style="display: flex; justify-content: space-around;">
+      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingItem(i)">{{item.nazwa}}</div>
+    <mat-icon  color="accent" (click)="deleteItem(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
     <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addItem()">add_circle</mat-icon>
   </mat-tab>
   <mat-tab label="Dodatki">
-    <div matRipple *ngFor="let accesory of this.eqS.accesoriesList" style="min-height: 50px; min-width: 100%; text-align: center;">{{accesory.nazwa}} <mat-divider></mat-divider></div>
+    <div matRipple *ngFor="let accesory of this.eqS.accesoriesList; let i=index" style="min-height: 50px; min-width: 100%; text-align: center;"><div style="display: flex; justify-content: space-around;">
+      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingAccesory(i)">{{accesory.nazwa}}</div>
+    <mat-icon  color="accent" (click)="deleteAccesory(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
     <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addAccesory()">add_circle</mat-icon>
   </mat-tab>
 </mat-tab-group>
@@ -44,6 +50,7 @@
       </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
+        <div style="display:flex; padding-left: 16px; padding-right: 16px; justify-content: space-between;">
         <mat-form-field>
           <mat-label>FPS</mat-label>
         <input type="number" matInput formControlName="fps">
@@ -56,15 +63,17 @@
           <mat-label>Zasięg skuteczny</mat-label>
           <input matInput type="number" formControlName="skuteczny">
       </mat-form-field>
-      <mat-form-field style="display: block;">
+    </div>
+      <mat-form-field style="display: block; padding: 0 16px">
         <mat-label>Dodatkowy opis</mat-label>
         <textarea style="display: block; min-height: 100px;" matInput formControlName="opis">
         </textarea>
       </mat-form-field>
+
       </mat-card-content>
       <mat-card-actions >
         <button mat-raised-button color="accent" *ngIf="showNewW===true"  style="float: right;" (click)="submitNewWeapon()">Dodaj </button>
-        <button mat-raised-button color="accent" *ngIf="showNewW===false" style="float: right;">Zapisz</button>
+        <button mat-raised-button color="accent" *ngIf="showNewW===false" style="float: right;" (click)="submitExistingWeapon()">Zapisz</button>
 
       </mat-card-actions>
     </form>
@@ -74,33 +83,85 @@
 
 <div *ngIf="showNewI!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
 <mat-card style="width: 80%; height: 40vh; margin: auto;"  #item>
-  <form >
+  <form [formGroup]="itemForm">
   <mat-card-header>
-    <mat-form-field>
-      <mat-label>Label</mat-label>
-      <input matInput >
-    </mat-form-field>
+    <mat-card-title>
+      <mat-form-field>
+        <mat-label style="margin-left: 0;">Nazwa</mat-label>
+        <input matInput formControlName="nazwa">
+      </mat-form-field>
+    </mat-card-title>
+
   </mat-card-header>
   <mat-card-content>
+    <div style="display: flex; padding-left: 16px;">
+      <mat-form-field>
+        <mat-label>Kategoria</mat-label>
+        <mat-select formControlName="rodzaj">
+          <mat-option value="Mundur">Mundur</mat-option>
+          <mat-option value="Kamizelka">Kamizelka</mat-option>
+          <mat-option value="System hydracyjny">System hydracyjny</mat-option>
+          <mat-option value="Hełm">Hełm</mat-option>
+          <mat-option value="Ochraniacze">Ochraniacze</mat-option>
+          <mat-option value="Obuwie">Obuwie</mat-option>
+          <mat-option value="Inne">Inne</mat-option>
+        </mat-select>
+      </mat-form-field>
 
+      <mat-form-field style="padding-left: 40px;">
+        <mat-label>Kamuflaż/Kolor</mat-label>
+        <input matInput formControlName="kamo">
+      </mat-form-field>
+    </div>
+    <mat-form-field style="display: block; padding: 0 16px">
+    <mat-label>Dodatkowy opis</mat-label>
+    <textarea matInput formControlName="opis" style=" min-height: 80px;"></textarea>
+  </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
+    <button mat-raised-button color="accent" *ngIf="showNewI===true"  style="float: right;" (click)="submitNewItem()">Dodaj </button>
+    <button mat-raised-button color="accent" *ngIf="showNewI===false" style="float: right;" (click)="submitExistingItem()">Zapisz</button>
 
   </mat-card-actions>
 </form>
 </mat-card>
 </div>
-<div *ngIf="showNewA!=null">
-<mat-card  #accesory>
+<div *ngIf="showNewA!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
+<mat-card style="width: 80%; height: 40vh; margin: auto;"  #accesory>
+  <form [formGroup]="accesoryForm">
   <mat-card-header>
-
+    <mat-card-title>
+      <mat-form-field>
+        <mat-label>Nazwa</mat-label>
+        <input matInput formControlName="nazwa">
+      </mat-form-field>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <mat-form-field>
+      <mat-label>Kategoria</mat-label>
+      <mat-select formControlName="rodzaj">
+        <mat-option value="Uchwyt">Uchwyt</mat-option>
+        <mat-option value="Kolimator">Kolimator</mat-option>
+        <mat-option value="Luneta">Luneta</mat-option>
+        <mat-option value="Pas nośny">Pas nośny</mat-option>
+        <mat-option value="Dwójnóg">Dwójnóg</mat-option>
+        <mat-option value="Kabura">Kabura</mat-option>
+        <mat-option value="Inne">Inne</mat-option>
+      </mat-select>
+    </mat-form-field>
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-
+    <mat-form-field style="display: block; padding: 0 16px">
+      <mat-label>Dodatkowy opis</mat-label>
+    <textarea matInput formControlName="opis" style="min-height: 80px; " ></textarea>
+  </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
-
+    <button mat-raised-button color="accent" *ngIf="showNewA===true"  style="float: right;" (click)="submitNewAccesory()">Dodaj </button>
+    <button mat-raised-button color="accent" *ngIf="showNewA===false" style="float: right;" (click)="submitExistingAccesory()">Zapisz</button>
   </mat-card-actions>
+</form>
 </mat-card>
 </div>
 </div>

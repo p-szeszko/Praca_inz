@@ -40,6 +40,7 @@ import { EventEditorComponent } from './my-work/event-editor/event-editor.compon
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatRippleModule} from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +86,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatNativeDateModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatRippleModule
   ],
   exports:[ReactiveFormsModule, FormsModule, CommonModule],
   providers: [LoginService, CookieService, EventServiceService],

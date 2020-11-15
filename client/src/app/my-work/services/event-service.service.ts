@@ -121,6 +121,7 @@ export class EventServiceService {
 
   public fillUsersEvents(user_id: string)
   {
+    this.userEvents=[];
     for(let ev of this.eventsList){
 
       if(ev.organizator._id===user_id)
@@ -141,6 +142,26 @@ export class EventServiceService {
         }
       }
     }
+  }
+  updateEventInClient(event: EventASG)
+  {
+    for(let i=0;i<this.eventsList.length;i++)
+    {
+      if(this.eventsList[i]._id===event._id)
+      {
+        this.eventsList[i]=event;
+      }
+    }
+    for(let i=0;i<this.eventsListSearch.length;i++)
+    {
+      if(this.eventsListSearch[i]._id===event._id)
+      {
+        this.eventsListSearch[i]=event;
+      }
+    }
+    this.fillUsersEvents(event.organizator._id);
+    this.setPaginatorList(0);
+    this.setPaginatorUsersEvents(0);
   }
 
   public setPaginatorUsersEvents(index: number)

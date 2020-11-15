@@ -247,16 +247,17 @@ router.post('/postField', function(req,res){
          new Item({
         owner: req.body.owner,    
         nazwa: req.body.nazwa,
-        rodzaj:req.boy.rodzaj,
+        rodzaj:req.body.rodzaj,
+        kamo: req.body.kamo,
         opis: req.body.opis
-    }).save((err, weapon)=>{
+    }).save((err, item)=>{
         if(err)
         {
             res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
         }
         else{
-            console.log(field);
-        res.status(200).json({success:true,message:'Dodano broń', created_id: weapon._id});
+            
+        res.status(200).json({success:true,message:'Dodano broń', created_id: item._id});
         }});
     });
     router.put('/putItem', function(req,res){
@@ -291,24 +292,24 @@ router.post('/postField', function(req,res){
             }
         });
     });
-    router.post('/postAccesories', function(req,res){
+    router.post('/postAccesory', function(req,res){
         new Accesory({
             owner: req.body.owner,    
             nazwa: req.body.nazwa,
-            rodzaj:req.boy.rodzaj,
+            rodzaj:req.body.rodzaj,
             opis: req.body.opis
-        }).save((err, weapon)=>{
+        }).save((err, accesory)=>{
             if(err)
             {
                 res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
             }
             else{
-                console.log(field);
-            res.status(200).json({success:true,message:'Dodano broń', created_id: weapon._id});
+                
+            res.status(200).json({success:true,message:'Dodano broń', created_id: accesory._id});
             }});
 
     });
-    router.put('/putAccesories', function(req,res){
+    router.put('/putAccesory', function(req,res){
         Accesory.updateOne({_id:req.body._id},req.body,function(error,result){
             if(error){
             console.log(error);
@@ -319,7 +320,7 @@ router.post('/postField', function(req,res){
             }
         });
     });
-    router.delete('/deleteAccesories', function(req,res){
+    router.delete('/deleteAccesory', function(req,res){
         Accesory.remove({_id:req.body._id},function(error,result){
             if(error){
             res.status(500).json({success:false,message:"Wystąpił błąd"})

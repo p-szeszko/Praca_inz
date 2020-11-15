@@ -163,10 +163,14 @@ export class EventEditorComponent implements OnInit{
 
     console.log(newEvent);
     this.eventS.updateEvent(newEvent).pipe(first()).subscribe(data=>{
-            newEvent._id=data.created_id;
+
             this.snackBar.openFromComponent(newEventSnackBarComponent,{duration: 5000,
             horizontalPosition: "center", verticalPosition: "top"});
-            this.eventS.addEventInClient(newEvent);
+            this.eventS.updateEventInClient(newEvent);
+            this.myFormInfo.reset();
+            this.myFormLimits.reset();
+            this.FormFractions.reset();
+            this.myFormDescirption.reset();
             this.eventS.eventToEdit=null;
 
           });

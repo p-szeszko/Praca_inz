@@ -30,7 +30,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
    }
   ngAfterViewInit(): void {
    setTimeout(() =>{ if(this.loginS.logged===true){
-      console.log('Mudafucka');
+
       console.log(this.loginS.user);
       this.eqS.getWeapons(this.loginS.user.userID).pipe(first()).subscribe(weapons=>{
         this.eqS.weaponsList=weapons;
@@ -97,12 +97,14 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
         skuteczny: this.weaponForm.value.skuteczny,
         opis: this.weaponForm.value.opis
       };
-      console.log(newWeapon);
+     console.log(newWeapon);
      this.eqS.postWeapon(newWeapon).pipe(first()).subscribe(data =>{
           newWeapon._id=data.created_id;
           this.eqS.weaponsList.push(newWeapon);
           console.log(data.message);
           this.weaponForm.reset();
+          this.weaponForm.markAsPristine();
+          this.showNewW=null;
           }, error =>{
             alert(error);
           }
@@ -113,21 +115,23 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
       alert("Sprawdź poprawność formularza.");
     }
   };
-  submitItem(){ if(this.weaponForm.valid===true){
+  submitNewItem(){ if(this.itemForm.valid===true){
     let newItem: Item = {
        _id:'',
        owner:  this.loginS.user.userID,
-       nazwa: this.weaponForm.value.nazwa,
+       nazwa: this.itemForm.value.nazwa,
        kamo: this.itemForm.value.kamo,
        rodzaj: this.itemForm.value.rodzaj,
-       opis: this.weaponForm.value.opis
+       opis: this.itemForm.value.opis
      };
-     console.log(newItem);
+    console.log(newItem);
     this.eqS.postItem(newItem).pipe(first()).subscribe(data =>{
          newItem._id=data.created_id;
          this.eqS.itemsList.push(newItem);
          console.log(data.message);
-         this.weaponForm.reset();
+         this.itemForm.reset();
+         this.itemForm.markAsPristine();
+         this.showNewI=null;
          }, error =>{
            alert(error);
          }
@@ -137,7 +141,33 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
    else{
      alert("Sprawdź poprawność formularza.");
    }}
-  submitAccesory(){};
+
+
+  submitNewAccesory(){ if(this.accesoryForm.valid===true){
+    let newAccesory: Accesory = {
+      _id:'',
+      owner:  this.loginS.user.userID,
+      nazwa: this.accesoryForm.value.nazwa,
+      rodzaj: this.accesoryForm.value.rodzaj,
+      opis: this.accesoryForm.value.opis
+    };
+    console.log(newAccesory);
+    this.eqS.postAccesory(newAccesory).pipe(first()).subscribe(data =>{
+        newAccesory._id=data.created_id;
+        this.eqS.accesoriesList.push(newAccesory);
+        console.log(data.message);
+        this.accesoryForm.reset();
+        this.accesoryForm.markAsPristine();
+        this.showNewA=null;
+        }, error =>{
+          alert(error);
+        }
+      )
+  }
+      else{
+        alert("Sprawdź poprawność formularza.");
+      }
+  };
 
 
   submitExistingWeapon(){
@@ -152,12 +182,16 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
         skuteczny: this.weaponForm.value.skuteczny,
         opis: this.weaponForm.value.opis
       };
-      console.log(newWeapon);
+     console.log(newWeapon);
      this.eqS.putWeapon(newWeapon).pipe(first()).subscribe(data =>{
-          newWeapon._id=data.created_id;
-          this.eqS.weaponsList.push(newWeapon);
-          alert(data.message);
+          //this.eqS.weaponsList.push(newWeapon);
+          this.eqS.updateWeapon(newWeapon);
+          console.log(data.message);
           this.weaponForm.reset();
+          this.showNewW=null;
+          this.selectedWeapon=null;
+          this.showNewW=null;
+          this.weaponForm.markAsPristine();
           }, error =>{
             alert(error);
           }
@@ -169,4 +203,132 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     }
   };
 
+  submitExistingItem(){ if(this.itemForm.valid===true){
+    let newItem: Item = {
+       _id:this.selectedItem._id,
+       owner:  this.loginS.user.userID,
+       nazwa: this.itemForm.value.nazwa,
+       kamo: this.itemForm.value.kamo,
+       rodzaj: this.itemForm.value.rodzaj,
+       opis: this.itemForm.value.opis
+     };
+    console.log(newItem);
+    this.eqS.putItem(newItem).pipe(first()).subscribe(data =>{
+
+         this.eqS.updateItem(newItem);
+         console.log(data.message);
+         this.itemForm.reset();
+         this.selectedItem=null;
+         this.showNewA=null;
+        this.itemForm.markAsPristine();
+         }, error =>{
+           alert(error);
+         }
+       );
+
+   }
+   else{
+     alert("Sprawdź poprawność formularza.");
+   }}
+
+
+   submitExistingAccesory(){ if(this.accesoryForm.valid===true){
+    let newAccesory: Accesory = {
+      _id:this.selectedAccesory._id,
+      owner:  this.loginS.user.userID,
+      nazwa: this.accesoryForm.value.nazwa,
+      rodzaj: this.accesoryForm.value.rodzaj,
+      opis: this.accesoryForm.value.opis
+    };
+    console.log(newAccesory);
+    this.eqS.putAccesory(newAccesory).pipe(first()).subscribe(data =>{
+       this.eqS.updateAccesory(newAccesory);
+       console.log(data.message);
+       this.accesoryForm.reset();
+       this.showNewA=null;
+       this.selectedAccesory=null;
+       this.accesoryForm.markAsPristine();
+        }, error =>{
+          alert(error);
+        }
+      )
+  }
+      else{
+        alert("Sprawdź poprawność formularza.");
+      }
+  };
+
+  showExistingWeapon(i: number)
+  {
+    this.setAllNull();
+    this.selectedWeapon=this.eqS.weaponsList[i];
+    this.weaponForm.patchValue({
+    nazwa: this.selectedWeapon.nazwa,
+    rodzaj: this.selectedWeapon.rodzaj,
+    fps: this.selectedWeapon.fps,
+    rof: this.selectedWeapon.rof,
+    skuteczny: this.selectedWeapon.skuteczny,
+    opis: this.selectedWeapon.opis
+   });
+    this.showNewW=false;
+  }
+  showExistingItem(i:number)
+  {
+    this.setAllNull();
+    this.selectedItem=this.eqS.itemsList[i];
+    this.itemForm.patchValue({
+      nazwa: this.selectedItem.nazwa,
+       kamo: this.selectedItem.kamo,
+       rodzaj: this.selectedItem.rodzaj,
+       opis: this.selectedItem.opis
+    })
+    this.showNewI=false;
+  }
+  showExistingAccesory(i: number){
+    this.setAllNull();
+    this.selectedAccesory=this.eqS.accesoriesList[i];
+    this.accesoryForm.patchValue({
+      nazwa: this.selectedAccesory.nazwa,
+      rodzaj: this.selectedAccesory.rodzaj,
+      opis: this.selectedAccesory.opis
+    });
+    this.showNewA=false;
+  }
+  deleteWeapon(i:number)
+  {
+    this.eqS.deleteWeapon(this.eqS.weaponsList[i]._id).pipe(first()).subscribe(data =>{
+      console.log(data.message);
+      this.eqS.weaponsList.splice(i,1);
+    },
+    error =>{
+      console.log(error);
+    })
+  }
+  deleteItem(i:number)
+  {
+    this.eqS.deleteItem(this.eqS.itemsList[i]._id).pipe(first()).subscribe(data =>{
+      console.log(data.message);
+      this.eqS.itemsList.splice(i,1);
+    }, error =>{
+      console.log(error);
+    })
+  }
+  deleteAccesory(i:number)
+  {
+    this.eqS.deleteAccesory(this.eqS.accesoriesList[i]._id).pipe(first()).subscribe(data =>{
+      console.log(data.message);
+      this.eqS.accesoriesList.splice(i,1);
+    }, error =>{
+      console.log(error);
+    })
+  }
+
+  setAllNull()
+  {
+    this.showNewW=null;
+    this.showNewI=null;
+    this.showNewA=null;
+  }
 }
+
+
