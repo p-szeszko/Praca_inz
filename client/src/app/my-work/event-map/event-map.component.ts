@@ -34,6 +34,7 @@ import { Player } from '../services/player';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {loginSnackBarComponent} from '../Snackbars/loginSnackBar';
 import { first } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.component.html',
@@ -58,6 +59,7 @@ export class EventMapComponent implements OnInit {
    response= {message: ''};
     selectedTab = 0;
     wsp = '';
+    replicas = ["Karabiny snajperskie", "Karabiny wyborowe", "Karabiny wsparcia", "Karabiny szturmowe", "Bliski dystans"]
 
   constructor(public eventS: EventServiceService, public loginS: LoginService, private snackBar: MatSnackBar) {
     this.eventS.getEvents().pipe(first()).subscribe(events => {
@@ -75,7 +77,8 @@ export class EventMapComponent implements OnInit {
 
 public checkIfShouldDisplay()
 {
-  if(this.eventToDisplay==null || this.loginS.logged===false || this.selectedTab==2)
+  //this.loginS.logged===false ||
+  if(this.eventToDisplay==null || this.selectedTab==2)
   return false;
   else
   return true;
@@ -106,6 +109,7 @@ public disabledButton()
 
   public func(event:string, name:string)
   {
+    if(this.loginS.logged===true){
     this.eventS.joinFraction(event,name,this.loginS.user.userID, this.loginS.user.name).subscribe(data=>{
       this.response=data ;
       console.log(this.response.message);
@@ -115,6 +119,11 @@ public disabledButton()
       this.response=e;
       alert(this.response.message);
     });
+  }
+  else{
+    this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
+      horizontalPosition: "center", verticalPosition: "top"});
+  }
   }
 
 
@@ -146,7 +155,7 @@ public unsignFromEvent(event:string)
   {
     this.selectedEvent = event;
     if (this.selectedEvent.length > 0){
-      if(this.loginS.logged===true){
+     // if(this.loginS.logged===true){
     this.eventToDisplay = this.selectedEvent[0];
     var coorString:string[]=this.eventToDisplay.wsp.split(',');
       var coor=[];
@@ -154,11 +163,11 @@ public unsignFromEvent(event:string)
       coor[1]=Number(coorString[1]);
       this.map.getView().setCenter(coor);
       this.map.getView().setZoom(10);
-      }
-      else{
-       this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
-        horizontalPosition: "center", verticalPosition: "top"})
-      }
+    //  }
+    //  else{
+     //  this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
+     //   horizontalPosition: "center", verticalPosition: "top"})
+     // }
     }
   }
   public SoldiersCount(ev: EventASG)
@@ -384,5 +393,32 @@ public setToEdit(ev)
   console.log(this.eventS.eventToEdit);
 }
 
+
+
+getMeDate(date: string)
+{
+  let date_to_show= new Date(date);
+  let options ={weekday: 'long', year:'numeric', month:'long', day: 'numeric' };
+  return date_to_show.toLocaleString('pl-PL',options);
+}
+deleteEvent(ev: EventASG)
+{
+
+    this.eventS.deleteEvent(ev).pipe(first()).subscribe(data => {
+     this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
+      horizontalPosition: "center", verticalPosition: "top"});
+  });
+}
+
+  userEventToShow(i: number)
+{
+  this.eventToDisplay=this.eventS.userEventsPaginator[i];
+  var coorString:string[]=this.eventToDisplay.wsp.split(',');
+      var coor=[];
+      coor[0]=Number(coorString[0]);
+      coor[1]=Number(coorString[1]);
+      this.map.getView().setCenter(coor);
+      this.map.getView().setZoom(10);
+}
 
 }

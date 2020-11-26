@@ -21,7 +21,7 @@ import { MyWorkComponent } from './my-work/my-work.component';
 import { HomeComponent, SiteDialogComponent } from './home/home.component';
 import { EventMapComponent } from './my-work/event-map/event-map.component';
 import { NavBarComponent } from './my-work/nav-bar/nav-bar.component';
-import { EquipmentComponent } from './my-work/equipment/equipment.component';
+import {  EquipmentComponent } from './my-work/equipment/equipment.component';
 import { LocationsListComponent } from './my-work/locations-list/locations-list.component';
 import { LoginComponent } from './my-work/login/login.component';
 import { LoginService } from './my-work/services/login.service';
@@ -41,6 +41,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRippleModule} from '@angular/material/core';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,6 +59,7 @@ import {MatRippleModule} from '@angular/material/core';
     LoginComponent,
     EventFormComponent,
     EventEditorComponent,
+
 
 
   ],
@@ -87,7 +91,8 @@ import {MatRippleModule} from '@angular/material/core';
     MatCheckboxModule,
     MatDividerModule,
     MatSidenavModule,
-    MatRippleModule
+    MatRippleModule,
+    MatDialogModule
   ],
   exports:[ReactiveFormsModule, FormsModule, CommonModule],
   providers: [LoginService, CookieService, EventServiceService],

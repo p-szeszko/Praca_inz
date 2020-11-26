@@ -11,7 +11,7 @@ export class EventASG {
   rodzaj: string;
   limity: number[];
   roznica: number;
-  frakcje: {strona: string, wielkosc: string, zapisani: Player[], otwarte: boolean}[];
+  frakcje: {strona: string, wielkosc: number, zapisani: Player[], otwarte: boolean}[];
   opis: string;
 
 }

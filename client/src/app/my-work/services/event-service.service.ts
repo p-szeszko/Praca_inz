@@ -105,10 +105,10 @@ export class EventServiceService {
   return x;
   }
 
-  deleteEvent(id:string){
-    const options = {_id:id};
+  deleteEvent(event: EventASG):Observable<any>{
+    const options = {_id:String(event._id)};
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-  return  this.http.delete('http://localhost:3000/api/deleteEvent', {params: options}).pipe(catchError(this.handleError));
+  return  this.http.delete('http://localhost:3000/api/deleteEvent', {params:options}).pipe(catchError(this.handleError));
   }
   public handleError(er:HttpErrorResponse){
     return throwError('Something went wrong, try again');
@@ -116,7 +116,9 @@ export class EventServiceService {
   public addEventInClient(event: EventASG)
   {
     this.eventsList.push(event);
+    this.fillUsersEvents(event.organizator._id);
     this.setPaginatorList(0);
+    this.setPaginatorUsersEvents(0);
   }
 
   public fillUsersEvents(user_id: string)
@@ -150,6 +152,7 @@ export class EventServiceService {
       if(this.eventsList[i]._id===event._id)
       {
         this.eventsList[i]=event;
+        break;
       }
     }
     for(let i=0;i<this.eventsListSearch.length;i++)
@@ -157,12 +160,38 @@ export class EventServiceService {
       if(this.eventsListSearch[i]._id===event._id)
       {
         this.eventsListSearch[i]=event;
+        break;
+      }
+    }
+
+    this.fillUsersEvents(event.organizator._id);
+    this.setPaginatorList(0);
+    this.setPaginatorUsersEvents(0);
+  }
+
+  deleteEventInClient(event: EventASG)
+  {
+    for(let i=0;i<this.eventsList.length;i++)
+    {
+      if(this.eventsList[i]._id===event._id)
+      {
+        this.eventsList.splice(i,1);
+        break;
+      }
+    }
+    for(let i=0;i<this.eventsListSearch.length;i++)
+    {
+      if(this.eventsListSearch[i]._id===event._id)
+      {
+        this.eventsListSearch.splice(i,1);
+        break;
       }
     }
     this.fillUsersEvents(event.organizator._id);
     this.setPaginatorList(0);
     this.setPaginatorUsersEvents(0);
   }
+
 
   public setPaginatorUsersEvents(index: number)
   {

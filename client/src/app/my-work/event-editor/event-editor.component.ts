@@ -30,7 +30,7 @@ export class EventEditorComponent implements OnInit{
     year= new Date().getFullYear();
     minDate;
     editedEv;
-
+    replicas = ["Karabiny snajperskie", "Karabiny wyborowe", "Karabiny wsparcia", "Karabiny szturmowe", "Bliski dystans"];
   myFormInfo: FormGroup;
   FormFractions: FormGroup;
   myFormLimits: FormGroup;
@@ -131,7 +131,7 @@ export class EventEditorComponent implements OnInit{
     this.myFormDescirption.markAllAsTouched();
     if(this.myFormInfo.valid && this.frakcjeForm.valid&& this.myFormLimits.valid && this.myFormDescirption.valid)
     {
-    let arr: {strona:string, wielkosc:string, zapisani:Player[], otwarte: boolean}[]=[];
+    let arr: {strona:string, wielkosc:number, zapisani:Player[], otwarte: boolean}[]=[];
     for (let frakcja of this.frakcjeForm.controls)
           {
             if(frakcja.value.zapisani===null)

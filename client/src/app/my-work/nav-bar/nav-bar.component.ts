@@ -9,6 +9,7 @@ import { LoginService } from '../services/login.service';
 })
 export class NavBarComponent implements OnInit {
    @Output('loginF') loginF: EventEmitter<any> = new EventEmitter<any>();
+   @Output('logoutF') logoutF: EventEmitter<any> = new EventEmitter<any>();
    map = 'Wydarzenia';
    locations = 'Miejscówki';
    login = 'Zaloguj się';
@@ -16,18 +17,19 @@ export class NavBarComponent implements OnInit {
   constructor(public route: Router, public themeS: ThemeService, public loginS: LoginService) { }
   ngOnInit(): void {
   }
-location()
-{
-  this.route.navigate(['myWork/locations']);
-}
+
 
 loginFunc()
 {
 this.loginF.emit();
 }
-
+logoutFunc()
+{
+  this.logoutF.emit();
+}
 changeTheme()
 {
+
   this.themeS._darkTheme = !this.themeS._darkTheme;
   console.log(this.themeS._darkTheme);
 }

@@ -13,7 +13,7 @@
     color:mat-color($accent);
   }
   a:hover{
-    color:mat-color($accent, A100) !IMPORTANT;
+    color:mat-color($accent) !IMPORTANT;
   }
   a:active{
       color: mat-color($foreground,text);
@@ -23,6 +23,9 @@
   }
   #name{
     color:mat-color($foreground, text);
+  }
+  .mat-icon:hover{
+    color:mat-color($accent) !IMPORTANT;
   }
 }
 h1 {

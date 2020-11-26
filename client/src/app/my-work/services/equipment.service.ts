@@ -69,7 +69,7 @@ export class EquipmentService {
   {
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const data={_id:id}
-    console.log(id);
+    //console.log(id);
     return this.http.delete('http://localhost:3000/api/deleteWeapon', {params:data}).pipe(catchError(this.handleError));
   }
   deleteItem(id:string):Observable<any>

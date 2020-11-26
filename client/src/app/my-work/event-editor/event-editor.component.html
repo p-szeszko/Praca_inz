@@ -88,7 +88,7 @@
           <div *ngFor="let limit of limity.controls; let i=index;" [formGroupName]="i" >
             <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
                 <mat-form-field>
-                  <input matInput type=number placeholder="Limit FPS" formControlName="limit" >
+                  <input matInput type=number placeholder={{replicas[i]}} formControlName="limit" >
                   <span matSuffix>FPS</span>
                 </mat-form-field>
 
@@ -105,8 +105,9 @@
     <mat-step [stepControl]="myFormDescirption" errorMessage="Dodaj opis wydarzenia.">
       <ng-template matStepLabel>Opis</ng-template>
       <form [formGroup]="myFormDescirption">
-        <mat-form-field>
-          <input matInput type=text placeholder="Opis wydarzenia" formControlName="opis">
+        <mat-form-field style="width: 100%;">
+          <textarea matInput type=text placeholder="Opis wydarzenia" formControlName="opis" style="min-height: 150px; width: 100%;">
+            </textarea>
         </mat-form-field>
       </form>
       <div>

@@ -31,7 +31,7 @@ export class EventFormComponent implements OnInit{
     month = new Date().getMonth()+1;
     year= new Date().getFullYear();
     minDate;
-
+    replicas = ["Karabiny snajperskie", "Karabiny wyborowe", "Karabiny wsparcia", "Karabiny szturmowe", "Bliski dystans"];
   myFormInfo: FormGroup;
   FormFractions: FormGroup;
   myFormLimits: FormGroup;
@@ -113,7 +113,7 @@ export class EventFormComponent implements OnInit{
 
     if(this.myFormInfo.valid && this.wsp!==''&& this.frakcjeForm.valid&& this.myFormLimits.valid && this.myFormDescirption.valid)
     {
-    let arr: {strona:string, wielkosc:string, zapisani:Player[], otwarte: boolean}[]=[];
+    let arr: {strona:string, wielkosc:number, zapisani:Player[], otwarte: boolean}[]=[];
     for (let frakcja of this.frakcjeForm.controls)
           {
 
@@ -147,6 +147,15 @@ export class EventFormComponent implements OnInit{
             horizontalPosition: "center", verticalPosition: "top"});
             this.eventS.addEventInClient(newEvent);
             this.refreshFeatures.emit();
+            this.myFormDescirption.reset();
+            this.myFormDescirption.markAsPristine();
+            this.myFormLimits.markAsPristine();
+            this.myFormInfo.reset();
+            this.myFormInfo.markAsPristine();
+            this.myFormLimits.reset();
+            this.frakcjeForm.reset();
+            this.frakcjeForm.markAsPristine();
+
             to_refresh=false;
           });
     }

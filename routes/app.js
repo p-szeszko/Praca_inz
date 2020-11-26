@@ -44,6 +44,10 @@ const checkToken = (req, res, next) => {
 router.post('/authenticate', function(res,req){
  
 });
+router.post('/refreshToken',checkToken,function(req,res){
+    const token = jwt.sign({userID:req.user.googleID},'POPOLUPO',{expiresIn:'24h'} )
+});
+
 router.get('/user',checkToken,function(req,res){
     
     User.findOne({googleID:req.decoded.userID}).select('googleID googleName photo').exec((err,user)=>{
@@ -91,7 +95,10 @@ router.post('/event', function(req,res){
 })
 router.get('/event',function(req,res){
     var date = new Date();
-    Event.find({"termin":{"$gte": new Date()}},function(error,result){
+    date.setDate(date.getDate()-1);
+    date.setHours(23,59,59);
+    //console.log(date);
+    Event.find({"termin":{"$gte": date}},function(error,result){
         if(error)
         console.log(error)
         else{
@@ -124,6 +131,11 @@ router.put('/updateEvent',async function(req,res){
 })
 
 router.put('/signUser',async function(req,res){
+    if(req.body.params._id==='') {
+        res.status(200).json({success:false, message:' Musisz być zalogowany'})
+    }
+    else{
+
     await Event.updateOne({"_id":req.body.params._id},{$pull:{"frakcje.$[].zapisani":{"_id":req.body.params._idGracz}}},{safe:true,multi:true});
     await Event.updateOne({"_id":req.body.params._id},{$addToSet:{"frakcje.$[s].zapisani":{_id:req.body.params._idGracz,imie:req.body.params.gracz}}},
     {arrayFilters:[{"s.strona":req.body.params.strona}],upsert:true},function(error,result){
@@ -139,10 +151,12 @@ router.put('/signUser',async function(req,res){
            }
            
        }
-})})
+
+})}
+})
 
 router.delete('/deleteEvent', function(req,res){
-    Event.remove({_id:req.body._id},function(error,result){
+    Event.remove({_id:req.query._id},function(error,result){
         if(error){
         console.log(error);
         res.json({success:false,message:"Wystąpił błąd"})

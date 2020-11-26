@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Accesory } from '../services/accesory';
@@ -7,6 +8,7 @@ import { EquipmentService } from '../services/equipment.service';
 import { Item } from '../services/item';
 import { LoginService } from '../services/login.service';
 import { Weapon } from '../services/weapon';
+import { deletedItemSnackBarComponent } from '../Snackbars/DeletedItem';
 
 @Component({
   selector: 'app-equipment',
@@ -25,7 +27,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
   selectedAccesory: Accesory;
   @ViewChild('weapon', {static: false}) inputEl:ElementRef;
 
-  constructor(private loginS: LoginService, public eqS: EquipmentService, private fb: FormBuilder, private route: ActivatedRoute ) {
+  constructor(private loginS: LoginService, public eqS: EquipmentService, private fb: FormBuilder, private route: ActivatedRoute, private snackbar: MatSnackBar ) {
 
    }
   ngAfterViewInit(): void {
@@ -114,7 +116,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     else{
       alert("Sprawdź poprawność formularza.");
     }
-  };
+  }
   submitNewItem(){ if(this.itemForm.valid===true){
     let newItem: Item = {
        _id:'',
@@ -155,7 +157,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     this.eqS.postAccesory(newAccesory).pipe(first()).subscribe(data =>{
         newAccesory._id=data.created_id;
         this.eqS.accesoriesList.push(newAccesory);
-        console.log(data.message);
+        //console.log(data.message);
         this.accesoryForm.reset();
         this.accesoryForm.markAsPristine();
         this.showNewA=null;
@@ -182,7 +184,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
         skuteczny: this.weaponForm.value.skuteczny,
         opis: this.weaponForm.value.opis
       };
-     console.log(newWeapon);
+     //console.log(newWeapon);
      this.eqS.putWeapon(newWeapon).pipe(first()).subscribe(data =>{
           //this.eqS.weaponsList.push(newWeapon);
           this.eqS.updateWeapon(newWeapon);
@@ -212,7 +214,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
        rodzaj: this.itemForm.value.rodzaj,
        opis: this.itemForm.value.opis
      };
-    console.log(newItem);
+    //console.log(newItem);
     this.eqS.putItem(newItem).pipe(first()).subscribe(data =>{
 
          this.eqS.updateItem(newItem);
@@ -243,7 +245,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     console.log(newAccesory);
     this.eqS.putAccesory(newAccesory).pipe(first()).subscribe(data =>{
        this.eqS.updateAccesory(newAccesory);
-       console.log(data.message);
+      // console.log(data.message);
        this.accesoryForm.reset();
        this.showNewA=null;
        this.selectedAccesory=null;
@@ -294,34 +296,47 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     });
     this.showNewA=false;
   }
-  deleteWeapon(i:number)
+ deleteWeapon(i:number)
   {
+
     this.eqS.deleteWeapon(this.eqS.weaponsList[i]._id).pipe(first()).subscribe(data =>{
       console.log(data.message);
       this.eqS.weaponsList.splice(i,1);
+      this.snackbar.openFromComponent(deletedItemSnackBarComponent, { duration: 5000,
+        horizontalPosition: "center", verticalPosition: "top"});
     },
     error =>{
       console.log(error);
     })
-  }
+
+}
   deleteItem(i:number)
   {
-    this.eqS.deleteItem(this.eqS.itemsList[i]._id).pipe(first()).subscribe(data =>{
-      console.log(data.message);
-      this.eqS.itemsList.splice(i,1);
-    }, error =>{
-      console.log(error);
-    })
+
+        this.eqS.deleteItem(this.eqS.itemsList[i]._id).pipe(first()).subscribe(data =>{
+          console.log(data.message);
+          this.eqS.itemsList.splice(i,1);
+          this.snackbar.openFromComponent(deletedItemSnackBarComponent, { duration: 5000,
+            horizontalPosition: "center", verticalPosition: "top"});
+        }, error =>{
+          console.log(error);
+        });
+
   }
+
   deleteAccesory(i:number)
   {
+
     this.eqS.deleteAccesory(this.eqS.accesoriesList[i]._id).pipe(first()).subscribe(data =>{
       console.log(data.message);
       this.eqS.accesoriesList.splice(i,1);
+      this.snackbar.openFromComponent(deletedItemSnackBarComponent, { duration: 5000,
+        horizontalPosition: "center", verticalPosition: "top"});
     }, error =>{
       console.log(error);
     })
   }
+
 
   setAllNull()
   {

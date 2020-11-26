@@ -2,9 +2,12 @@
 <div class="sideNav">
 <mat-tab-group style="margin: 0px;">
   <mat-tab label="Repliki" >
-    <div  *ngFor="let weapon of this.eqS.weaponsList;  let i=index"  style=" min-width: 100%; text-align: center; margin: auto; "><div style="display: flex; justify-content: space-around;">
+    <div  *ngFor="let weapon of this.eqS.weaponsList;  let i=index"  style=" min-width: 100%; text-align: center; margin: auto; ">
+      <div style="display: flex; justify-content: space-around;">
       <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingWeapon(i)">{{weapon.nazwa}}</div>
-    <mat-icon  color="accent" (click)="deleteWeapon(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
+    <mat-icon  color="accent" (click)="deleteWeapon(i);">delete</mat-icon></div>
+    <mat-divider></mat-divider>
+  </div>
     <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addWeapon()">add_circle</mat-icon>
   </mat-tab>
   <mat-tab label="Oporządzenie">
@@ -25,7 +28,7 @@
 <div style="width: 80%; text-align:center; ">
 
 <div *ngIf="showNewW!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
-    <mat-card style="width: 80%; height: 40vh; margin: auto;"  #weapon>
+    <mat-card style="width: 80%; min-height: 40vh; margin: auto;"  #weapon>
       <form [formGroup]="weaponForm" >
       <mat-card-header>
         <mat-card-title>
@@ -82,7 +85,7 @@
 </div>
 
 <div *ngIf="showNewI!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
-<mat-card style="width: 80%; height: 40vh; margin: auto;"  #item>
+<mat-card style="width: 80%; min-height: 40vh; margin: auto;"  #item>
   <form [formGroup]="itemForm">
   <mat-card-header>
     <mat-card-title>
@@ -127,7 +130,7 @@
 </mat-card>
 </div>
 <div *ngIf="showNewA!=null" style="display: inline-block; margin-top: 10%; min-width: 100%;">
-<mat-card style="width: 80%; height: 40vh; margin: auto;"  #accesory>
+<mat-card style="width: 80%; min-height: 40vh; margin: auto;"  #accesory>
   <form [formGroup]="accesoryForm">
   <mat-card-header>
     <mat-card-title>

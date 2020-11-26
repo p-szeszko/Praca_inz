@@ -11,7 +11,7 @@
   <a   [routerLink]="['locations']" >{{locations}}</a>
 </div >
 <div class="innerEnd">
-  <a color="accent"(click)="loginFunc()" style=" margin-top: auto; margin-bottom: auto; padding-right: 0px;">Zaloguj </a><mat-icon style="margin-top: auto !IMPORTANT; margin-bottom: auto !IMPORTANT;" (click)="loginFunc()">login</mat-icon>
+  <a color="accent"(click)="loginFunc()" style=" cursor: pointer; margin-top: auto; margin-bottom: auto; padding-right: 0px;">Zaloguj </a><mat-icon style="margin-top: auto !IMPORTANT; margin-bottom: auto !IMPORTANT;" (click)="loginFunc()">login</mat-icon>
 
 </div>
 
@@ -38,7 +38,7 @@
 </div >
 <div class="innerEnd">
 <a id="name" style=" margin-top: auto; margin-bottom: auto; padding-right: 0px; cursor: default">{{loginS.user.name}}</a>
-
+<mat-icon (click)="logoutFunc()" [routerLink]="['map']" style=" margin-top: auto; margin-bottom: auto; padding-right: 0px; padding-left:2px;" >exit_to_app</mat-icon>
 </div>
 
 </div>
