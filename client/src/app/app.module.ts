@@ -41,6 +41,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRippleModule} from '@angular/material/core';
+import { deleteDialogComponent } from './my-work/Snackbars/DeleteDialog';
 
 
 
@@ -59,6 +60,7 @@ import {MatRippleModule} from '@angular/material/core';
     LoginComponent,
     EventFormComponent,
     EventEditorComponent,
+    deleteDialogComponent
 
 
 

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -8,7 +9,10 @@ import { EquipmentService } from '../services/equipment.service';
 import { Item } from '../services/item';
 import { LoginService } from '../services/login.service';
 import { Weapon } from '../services/weapon';
+import { addedItemSnackBarComponent } from '../Snackbars/addedItem';
+import { deleteDialogComponent } from '../Snackbars/DeleteDialog';
 import { deletedItemSnackBarComponent } from '../Snackbars/DeletedItem';
+import { updatedItemSnackBarComponent } from '../Snackbars/updatedItem';
 
 @Component({
   selector: 'app-equipment',
@@ -27,7 +31,7 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
   selectedAccesory: Accesory;
   @ViewChild('weapon', {static: false}) inputEl:ElementRef;
 
-  constructor(private loginS: LoginService, public eqS: EquipmentService, private fb: FormBuilder, private route: ActivatedRoute, private snackbar: MatSnackBar ) {
+  constructor(private dialog: MatDialog, private loginS: LoginService, public eqS: EquipmentService, private fb: FormBuilder, private route: ActivatedRoute, private snackbar: MatSnackBar ) {
 
    }
   ngAfterViewInit(): void {
@@ -71,20 +75,17 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     });
   }
   addWeapon(){
+    this.setAllNull()
     this.showNewW=true;
-    this.showNewI=null;
-    this.showNewA=null;
     setTimeout(() => this.inputEl.nativeElement.focus(), 30);
   }
   addItem(){
+    this.setAllNull()
     this.showNewI=true;
-    this.showNewW=null;
-    this.showNewA=null;
   }
   addAccesory(){
+    this.setAllNull()
     this.showNewA=true;
-    this.showNewW=null;
-    this.showNewI=null;
   }
 
   submitNewWeapon(){
@@ -107,6 +108,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
           this.weaponForm.reset();
           this.weaponForm.markAsPristine();
           this.showNewW=null;
+          this.snackbar.openFromComponent(addedItemSnackBarComponent, { duration: 5000,
+            horizontalPosition: "center", verticalPosition: "top"});
           }, error =>{
             alert(error);
           }
@@ -134,6 +137,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
          this.itemForm.reset();
          this.itemForm.markAsPristine();
          this.showNewI=null;
+         this.snackbar.openFromComponent(addedItemSnackBarComponent, { duration: 5000,
+          horizontalPosition: "center", verticalPosition: "top"});
          }, error =>{
            alert(error);
          }
@@ -161,6 +166,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
         this.accesoryForm.reset();
         this.accesoryForm.markAsPristine();
         this.showNewA=null;
+        this.snackbar.openFromComponent(addedItemSnackBarComponent, { duration: 5000,
+          horizontalPosition: "center", verticalPosition: "top"});
         }, error =>{
           alert(error);
         }
@@ -194,6 +201,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
           this.selectedWeapon=null;
           this.showNewW=null;
           this.weaponForm.markAsPristine();
+          this.snackbar.openFromComponent(updatedItemSnackBarComponent, { duration: 5000,
+            horizontalPosition: "center", verticalPosition: "top"});
           }, error =>{
             alert(error);
           }
@@ -223,6 +232,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
          this.selectedItem=null;
          this.showNewA=null;
         this.itemForm.markAsPristine();
+        this.snackbar.openFromComponent(updatedItemSnackBarComponent, { duration: 5000,
+          horizontalPosition: "center", verticalPosition: "top"});
          }, error =>{
            alert(error);
          }
@@ -250,6 +261,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
        this.showNewA=null;
        this.selectedAccesory=null;
        this.accesoryForm.markAsPristine();
+       this.snackbar.openFromComponent(updatedItemSnackBarComponent, { duration: 5000,
+        horizontalPosition: "center", verticalPosition: "top"});
         }, error =>{
           alert(error);
         }
@@ -298,9 +311,11 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
   }
  deleteWeapon(i:number)
   {
-
+    const dialogRef = this.dialog.open(deleteDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result===true){
     this.eqS.deleteWeapon(this.eqS.weaponsList[i]._id).pipe(first()).subscribe(data =>{
-      console.log(data.message);
+      //console.log(data.message);
       this.eqS.weaponsList.splice(i,1);
       this.snackbar.openFromComponent(deletedItemSnackBarComponent, { duration: 5000,
         horizontalPosition: "center", verticalPosition: "top"});
@@ -308,11 +323,15 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     error =>{
       console.log(error);
     })
+  }
+})
 
 }
   deleteItem(i:number)
   {
-
+    const dialogRef = this.dialog.open(deleteDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result===true){
         this.eqS.deleteItem(this.eqS.itemsList[i]._id).pipe(first()).subscribe(data =>{
           console.log(data.message);
           this.eqS.itemsList.splice(i,1);
@@ -321,12 +340,16 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
         }, error =>{
           console.log(error);
         });
+      }
+    })
 
   }
 
   deleteAccesory(i:number)
   {
-
+    const dialogRef = this.dialog.open(deleteDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result===true){
     this.eqS.deleteAccesory(this.eqS.accesoriesList[i]._id).pipe(first()).subscribe(data =>{
       console.log(data.message);
       this.eqS.accesoriesList.splice(i,1);
@@ -335,6 +358,8 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     }, error =>{
       console.log(error);
     })
+    }
+  })
   }
 
 
@@ -343,6 +368,15 @@ export class EquipmentComponent implements OnInit, AfterViewInit {
     this.showNewW=null;
     this.showNewI=null;
     this.showNewA=null;
+    this.selectedAccesory=null;
+    this.selectedItem=null;
+    this.selectedWeapon=null;
+    this.weaponForm.reset();
+    this.weaponForm.markAsPristine();
+    this.itemForm.reset();
+    this.itemForm.markAsPristine();
+    this.accesoryForm.reset();
+    this.accesoryForm.markAsPristine();
   }
 }
 

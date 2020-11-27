@@ -2,25 +2,25 @@
 <div class="sideNav">
 <mat-tab-group style="margin: 0px;">
   <mat-tab label="Repliki" >
-    <div  *ngFor="let weapon of this.eqS.weaponsList;  let i=index"  style=" min-width: 100%; text-align: center; margin: auto; ">
+    <div  *ngFor="let weapon of this.eqS.weaponsList;  let i=index"  style=" min-width: 100%; text-align: center; margin: auto; float:bottom; margin-top:5px;">
       <div style="display: flex; justify-content: space-around;">
-      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingWeapon(i)">{{weapon.nazwa}}</div>
+      <div matRipple style="cursor: pointer; width: 80%; margin:auto; height: 100%; font-size:22px;" (click)="showExistingWeapon(i)">{{weapon.nazwa}}</div>
     <mat-icon  color="accent" (click)="deleteWeapon(i);">delete</mat-icon></div>
     <mat-divider></mat-divider>
   </div>
-    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addWeapon()">add_circle</mat-icon>
+    <mat-icon color="accent" style="margin-left: 43.5%; margin-top: 5%" (click)="addWeapon()">add_circle</mat-icon>
   </mat-tab>
-  <mat-tab label="Oporządzenie">
-    <div matRipple *ngFor="let item of this.eqS.itemsList; let i=index" style="min-height: 50px; min-width: 100%; text-align: center;"><div style="display: flex; justify-content: space-around;">
-      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingItem(i)">{{item.nazwa}}</div>
+  <mat-tab label="Oporządzenie" >
+    <div  *ngFor="let item of this.eqS.itemsList; let i=index" style=" min-height: 25px; min-width: 100%; text-align: center; float:bottom; margin-top:5px;"><div style="display: flex; justify-content: space-around;">
+      <div matRipple style="cursor: pointer; width: 80%; margin:auto; height: 100%; font-size:22px;" (click)="showExistingItem(i)">{{item.nazwa}}</div>
     <mat-icon  color="accent" (click)="deleteItem(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
-    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addItem()">add_circle</mat-icon>
+    <mat-icon color="accent" style="margin-left: 43.5%; margin-top: 5%" (click)="addItem()">add_circle</mat-icon>
   </mat-tab>
   <mat-tab label="Dodatki">
-    <div matRipple *ngFor="let accesory of this.eqS.accesoriesList; let i=index" style="min-height: 50px; min-width: 100%; text-align: center;"><div style="display: flex; justify-content: space-around;">
-      <div matRipple style="cursor: pointer; width: 80%" (click)="showExistingAccesory(i)">{{accesory.nazwa}}</div>
+    <div  *ngFor="let accesory of this.eqS.accesoriesList; let i=index" style=" min-width: 100%; text-align: center; float:bottom; margin-top:5px;"><div style="display: flex; justify-content: space-around;">
+      <div matRipple style="cursor: pointer; width: 80%; margin:auto; height: 100%; font-size:22px;" (click)="showExistingAccesory(i)">{{accesory.nazwa}}</div>
     <mat-icon  color="accent" (click)="deleteAccesory(i);">delete</mat-icon></div> <mat-divider></mat-divider></div>
-    <mat-icon color="accent" style="margin-left: 50%; margin-top: 5%" (click)="addAccesory()">add_circle</mat-icon>
+    <mat-icon color="accent" style="margin-left: 43.5%; margin-top: 5%" (click)="addAccesory()">add_circle</mat-icon>
   </mat-tab>
 </mat-tab-group>
 </div>

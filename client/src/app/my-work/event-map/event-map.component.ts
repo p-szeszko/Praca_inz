@@ -35,6 +35,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {loginSnackBarComponent} from '../Snackbars/loginSnackBar';
 import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { deleteDialogComponent } from '../Snackbars/DeleteDialog';
+import {MatDialogModule} from '@angular/material/dialog';
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.component.html',
@@ -61,7 +63,7 @@ export class EventMapComponent implements OnInit {
     wsp = '';
     replicas = ["Karabiny snajperskie", "Karabiny wyborowe", "Karabiny wsparcia", "Karabiny szturmowe", "Bliski dystans"]
 
-  constructor(public eventS: EventServiceService, public loginS: LoginService, private snackBar: MatSnackBar) {
+  constructor(public eventS: EventServiceService, public loginS: LoginService, private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.eventS.getEvents().pipe(first()).subscribe(events => {
       this.eventS.eventsList = events;
       this.eventS.eventsListSearch = events;
@@ -404,10 +406,15 @@ getMeDate(date: string)
 deleteEvent(ev: EventASG)
 {
 
+    const dialogRef = this.dialog.open(deleteDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result===true){
     this.eventS.deleteEvent(ev).pipe(first()).subscribe(data => {
      this.snackBar.openFromComponent(loginSnackBarComponent, { duration: 5000,
       horizontalPosition: "center", verticalPosition: "top"});
   });
+}
+})
 }
 
   userEventToShow(i: number)
