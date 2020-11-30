@@ -353,6 +353,8 @@ public unsignFromEvent(event:string)
       this.vectorSource.addFeature(feature)}} );
       //Sthis.addFeatures();
   }
+
+
 addFeatures(){
     var ext = this.map.getView().calculateExtent(this.map.getSize());
     var features = [];
