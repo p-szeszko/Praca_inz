@@ -15,6 +15,7 @@ export class EventServiceService {
   public userEvents: EventASG[] = [];
   public userEventsPaginator: EventASG[] = [];
   public eventToEdit: EventASG = null;
+  url='http://127.0.0.1:3000';
   constructor(private http: HttpClient) {
 
 
@@ -43,8 +44,8 @@ export class EventServiceService {
     const options = {_id:event, strona:faction, _idGracz:user, gracz:name}
     const header = new Headers();
     header.append('Content-Type','application/json; charset=utf-8');
-    console.log(options);
-    return this.http.put('http://localhost:3000/api/signUser',{headers: header, params: options})
+    //console.log(options);
+    return this.http.put(this.url+'/api/signUser',{headers: header, params: options})
      .pipe(
        catchError(this.handleError)
      );
@@ -52,7 +53,7 @@ export class EventServiceService {
   public leaveFraction(event:string, player:string):Observable<any>{
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const data= {_id:event, gracz: player};
-    return this.http.put('http://localhost:3000/api/unsignUser', data ).pipe(catchError(this.handleError));
+    return this.http.put(this.url+'/api/unsignUser', data ).pipe(catchError(this.handleError));
   }
 
   public addPlayerInClient(event: string, side:string, _idGracz: string, name: string)
@@ -91,24 +92,24 @@ export class EventServiceService {
   public postEvent(event: EventASG):Observable<any>
   {
 //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.post('http://localhost:3000/api/event', event ).pipe(catchError(this.handleError));
+    return this.http.post(this.url+'/api/event', event ).pipe(catchError(this.handleError));
   }
 
   public updateEvent(event: EventASG):Observable<any>
   {
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.put('http://localhost:3000/api/updateEvent', event).pipe(catchError(this.handleError));
+    return this.http.put(this.url+'/api/updateEvent', event).pipe(catchError(this.handleError));
   }
   public  getEvents(){
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-  const x =  this.http.get<EventASG[]>('http://localhost:3000/api/event').pipe(catchError(this.handleError));
+  const x =  this.http.get<EventASG[]>(this.url+'/api/event').pipe(catchError(this.handleError));
   return x;
   }
 
   deleteEvent(event: EventASG):Observable<any>{
     const options = {_id:String(event._id)};
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-  return  this.http.delete('http://localhost:3000/api/deleteEvent', {params:options}).pipe(catchError(this.handleError));
+  return  this.http.delete(this.url+'/api/deleteEvent', {params:options}).pipe(catchError(this.handleError));
   }
   public handleError(er:HttpErrorResponse){
     return throwError('Something went wrong, try again');

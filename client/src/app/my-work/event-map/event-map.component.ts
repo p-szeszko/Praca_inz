@@ -320,8 +320,8 @@ public unsignFromEvent(event:string)
        if (c.length === 1){
         this.eventToDisplay=this.eventS.eventsList.find(x=>x._id==this.feature.get('id'));
         this.selectedEvent=[];
-        this.content = '<div class="ol-popup"> Numer id punktu: ';
-        this.content += this.feature.get('id') + '</div>';
+        this.content = '<div class="ol-popup" style="min-width: 150px"> <h2> ';
+        this.content += this.feature.get('nazwa') + '</h2><hr><h3>'+ this.getMeDate(this.feature.get('data')) + '</div>';
         this.popup.show(this.feature.getGeometry().getCoordinates(), this.content);
        }
        else{
@@ -347,7 +347,6 @@ public unsignFromEvent(event:string)
       //console.log(evt.coordinate);
       this.wsp = evt.coordinate;
       let feature = new Feature(new Point(evt.coordinate));
-      feature.set('i', 5);
       //console.log(evt.coordinates);
       this.vectorSource.clear();
       this.vectorSource.addFeature(feature)}} );
@@ -364,11 +363,12 @@ addFeatures(){
       coor[0]=Number(coorString[0]);
       coor[1]=Number(coorString[1]);
       var feature = new Feature(new Point(coor));
-      feature.set('id', ev._id);
+      feature.set('nazwa', ev.nazwa);
+      feature.set('data', ev.termin);
       features.push(feature)
     }
     this.clusterSource.getSource().clear();
-    console.log('here');
+    //console.log('here');
     this.clusterSource.getSource().addFeatures(features);
 
   }
@@ -382,11 +382,12 @@ refreshFeatures()
     coor[0]=Number(coorString[0]);
     coor[1]=Number(coorString[1]);
     var feature = new Feature(new Point(coor));
-    feature.set('id', ev._id);
+    feature.set('nazwa', ev.nazwa);
+    feature.set('data', ev.termin);
     features.push(feature)
   }
   this.clusterSource.getSource().clear();
-  console.log('here refresh');
+  //console.log('here refresh');
   this.clusterSource.getSource().addFeatures(features);
 }
 

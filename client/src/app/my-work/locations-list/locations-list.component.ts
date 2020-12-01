@@ -43,6 +43,7 @@ import { Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Location} from '../services/location';
 
+
 @Component({
   selector: 'app-locations-list',
   templateUrl: './locations-list.component.html',
@@ -236,8 +237,8 @@ export class LocationsListComponent implements OnInit {
        this.feature = c[0];
        if (c.length === 1){
         this.locationsToDisplay=this.locationS.fieldsList.find(x=>x._id==this.feature.get('id'));
-        this.content = '<div class="ol-popup"> Numer id punktu: ';
-        this.content += this.feature.get('id') + '</div>';
+        this.content = '<div class="ol-popup" style="min-width:250px;"> <h2> ';
+        this.content += this.feature.get('nazwa')+ '</h2><hr><h3>' +this.feature.get('adres') + '</h3><hr><h4>' + this.feature.get('opis')  + '</h4></div>';
         this.popup.show(this.feature.getGeometry().getCoordinates(), this.content);
        }
        else{
@@ -285,7 +286,9 @@ export class LocationsListComponent implements OnInit {
       coor[0]=Number(coorString[0]);
       coor[1]=Number(coorString[1]);
       var feature = new Feature(new Point(coor));
-      feature.set('id', ev._id);
+      feature.set('nazwa', ev.nazwa);
+     feature.set('adres',ev.adres);
+     feature.set('opis', ev.opis);
       features.push(feature)
     }
     this.clusterSource.getSource().clear();
@@ -302,7 +305,9 @@ export class LocationsListComponent implements OnInit {
      coor[0]=Number(coorString[0]);
      coor[1]=Number(coorString[1]);
      var feature = new Feature(new Point(coor));
-     feature.set('id', ev._id);
+     feature.set('nazwa', ev.nazwa);
+     feature.set('adres',ev.adres);
+     feature.set('opis', ev.opis);
      features.push(feature)
     }
    this.clusterSource.getSource().clear();

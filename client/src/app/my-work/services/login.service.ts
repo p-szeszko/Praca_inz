@@ -12,6 +12,7 @@ export class LoginService {
   error=false;
   user={ userID:'', name:'',photo:''};
   logged=false;
+  url='http://localhost:3000';
   constructor(private http: HttpClient) {
 
    }
@@ -19,7 +20,7 @@ export class LoginService {
   public Login(token: String): Observable<any>{
 
     const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    var x = this.http.get('http://localhost:3000/api/user', {headers: header, observe: 'response'}).pipe(catchError(this.loginError));
+    var x = this.http.get(this.url+'/api/user', {headers: header, observe: 'response'}).pipe(catchError(this.loginError));
 
     return x;
   }

@@ -14,7 +14,7 @@ export class EquipmentService {
   weaponsList: Weapon[] = [];
   itemsList: Item[] = [];
   accesoriesList: Accesory[] = [];
-
+  url='http://localhost:3000';
   constructor(private http: HttpClient ) { }
 
   getWeapons(id:string)
@@ -22,45 +22,45 @@ export class EquipmentService {
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const data={owner: id}
     console.log(id);
-    return this.http.get<Weapon[]>('http://localhost:3000/api/getWeapons', {params:data}).pipe(catchError(this.handleError));
+    return this.http.get<Weapon[]>(this.url+'/api/getWeapons', {params:data}).pipe(catchError(this.handleError));
   }
   getItems(id:string)
   {
     const data={owner:id}
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.get<Item[]>('http://localhost:3000/api/getItems', {params:data}).pipe(catchError(this.handleError));
+    return this.http.get<Item[]>(this.url+'/api/getItems', {params:data}).pipe(catchError(this.handleError));
   }
   getAccesories(id:string)
   {
     const data={owner:id}
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.get<Accesory[]>('http://localhost:3000/api/getAccesories', {params:data}).pipe(catchError(this.handleError));
+    return this.http.get<Accesory[]>(this.url+'/api/getAccesories', {params:data}).pipe(catchError(this.handleError));
   }
 
   postWeapon(weapon:Weapon):Observable<any>
   {
-    return this.http.post('http://localhost:3000/api/postWeapon',weapon).pipe(catchError(this.handleError));
+    return this.http.post(this.url+'/api/postWeapon',weapon).pipe(catchError(this.handleError));
   }
   putWeapon(weapon:Weapon):Observable<any>
   {
-    return this.http.put('http://localhost:3000/api/putWeapon',weapon).pipe(catchError(this.handleError));
+    return this.http.put(this.url+'/api/putWeapon',weapon).pipe(catchError(this.handleError));
   }
 
   postItem(item:Item):Observable<any>
   {
-    return this.http.post('http://localhost:3000/api/postItem', item).pipe(catchError(this.handleError));
+    return this.http.post(this.url+'/api/postItem', item).pipe(catchError(this.handleError));
   }
   putItem(item:Item):Observable<any>
   {
-    return this.http.put('http://localhost:3000/api/putItem', item).pipe(catchError(this.handleError));
+    return this.http.put(this.url+'/api/putItem', item).pipe(catchError(this.handleError));
   }
   postAccesory(accesory: Accesory):Observable<any>
   {
-    return this.http.post('http://localhost:3000/api/postAccesory', accesory).pipe(catchError(this.handleError));
+    return this.http.post(this.url+'/api/postAccesory', accesory).pipe(catchError(this.handleError));
   }
   putAccesory(accesory: Accesory):Observable<any>
   {
-    return this.http.put('http://localhost:3000/api/putAccesory', accesory).pipe(catchError(this.handleError));
+    return this.http.put(this.url+'/api/putAccesory', accesory).pipe(catchError(this.handleError));
   }
   public handleError(er: HttpErrorResponse){
     return throwError(er);
@@ -70,19 +70,19 @@ export class EquipmentService {
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
     const data={_id:id}
     //console.log(id);
-    return this.http.delete('http://localhost:3000/api/deleteWeapon', {params:data}).pipe(catchError(this.handleError));
+    return this.http.delete(this.url+'/api/deleteWeapon', {params:data}).pipe(catchError(this.handleError));
   }
   deleteItem(id:string):Observable<any>
   {
     const data={_id:id}
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.delete('http://localhost:3000/api/deleteItem', {params:data}).pipe(catchError(this.handleError));
+    return this.http.delete(this.url+'/api/deleteItem', {params:data}).pipe(catchError(this.handleError));
   }
   deleteAccesory(id:string):Observable<any>
   {
     const data={_id:id}
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-    return this.http.delete('http://localhost:3000/api/deleteAccesory', {params:data}).pipe(catchError(this.handleError));
+    return this.http.delete(this.url+'/api/deleteAccesory', {params:data}).pipe(catchError(this.handleError));
   }
 
   updateWeapon(weapon:Weapon){

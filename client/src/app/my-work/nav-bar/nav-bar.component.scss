@@ -27,6 +27,20 @@
   .mat-icon:hover{
     color:mat-color($accent) !IMPORTANT;
   }
+  a{
+    display: inline;
+    color:mat-color($foreground, text) !important;
+    margin-top:auto;
+    margin-bottom: auto;
+    text-align: center;
+    align-items: center;
+    height: 100%;
+    padding-right: 16px;
+    margin-left: 0px;
+    margin-right: 0px;
+    text-decoration: none;
+    border-style: none;
+  }
 }
 h1 {
   display: inline;
