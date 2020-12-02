@@ -238,7 +238,7 @@ export class LocationsListComponent implements OnInit {
        if (c.length === 1){
         this.locationsToDisplay=this.locationS.fieldsList.find(x=>x._id==this.feature.get('id'));
         this.content = '<div class="ol-popup" style="min-width:250px;"> <h2> ';
-        this.content += this.feature.get('nazwa')+ '</h2><hr><h3>' +this.feature.get('adres') + '</h3><hr><h4>' + this.feature.get('opis')  + '</h4></div>';
+        this.content += this.feature.get('nazwa')+ '</h2><hr><h3> Adres: ' +this.feature.get('adres') + '</h3><hr><h4>' + this.feature.get('opis')  + '</h4></div>';
         this.popup.show(this.feature.getGeometry().getCoordinates(), this.content);
        }
        else{

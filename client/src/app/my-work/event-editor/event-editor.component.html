@@ -51,7 +51,7 @@
 </mat-grid-tile>
         </mat-grid-list>
       </div>
-      <div style="float: left;">
+      <div>
         <button  mat-raised-button color="accent" (click)="markTouchedInfo(stepper)" style="float:right;">Dalej</button>
       </div>
       </form>
@@ -62,7 +62,7 @@
       <form [formGroup]="FormFractions">
     <div formArrayName="frakcje">
       <div *ngFor="let frakcja of frakcjeForm.controls; let i=index; "  [formGroupName]="i" >
-        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width:100%">
+        <div style="display: flex; flex-direction: row;  justify-content: space-evenly; width:50%; margin: auto;">
              <mat-form-field >
                  <input matInput placeholder="Nazwa frakcji" formControlName='strona' required>
               </mat-form-field>
@@ -73,10 +73,10 @@
 
          </div>
     </div>
-    <button mat-icon-button (click)="addFraction()" style="margin:auto"><mat-icon color="accent" style="float:right;">add_circle</mat-icon></button>
+    <button mat-icon-button (click)="addFraction()" style="margin-left: 45%; margin-top: 15px;"><mat-icon color="accent" style="float:right;">add_circle</mat-icon></button>
     </div>
   </form>
-  <div style="float: left;">
+  <div>
     <button  mat-raised-button color="accent" matStepperPrevious style="float:right;">Wróć</button>
     <button  mat-raised-button color="accent" (click)="markTouchedFractions(stepper)" style="float:right;">Dalej</button>
   </div>
@@ -97,7 +97,7 @@
 
         </div>
       </form>
-      <div style="float: left;">
+      <div >
         <button  mat-raised-button color="accent" matStepperPrevious style="float:right;">Wróć</button>
         <button  mat-raised-button color="accent" (click)="markTouchedLimits(stepper)" style="float:right;">Dalej</button>
       </div>

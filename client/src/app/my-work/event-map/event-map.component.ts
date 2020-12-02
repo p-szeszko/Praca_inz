@@ -89,8 +89,10 @@ public checkIfShouldDisplay()
 
 public changedTabHandler(event)
 {
-  console.log(event);
-  this.selectedTab=event;
+  //console.log(event);
+  //this.selectedTab=event;
+  this.eventS.eventToEdit=null;
+  this.eventToDisplay=null;
 }
 
 public disabledButton()
@@ -149,12 +151,22 @@ public unsignFromEvent(event:string)
   }
     return count;
   }
+  public countPlayersEv(ev: EventASG)
+  {
+    let count=0;
+    for (let fraction of ev.frakcje)
+    {
+      count+=fraction.zapisani.length;
+  }
+    return count;
+  }
   public changePage(event?: PageEvent)
   {
     this.eventS.setPaginatorList(event.pageIndex);
   }
   onNgModelChange(event)
   {
+    this.eventS.eventToEdit=null;
     this.selectedEvent = event;
     if (this.selectedEvent.length > 0){
      // if(this.loginS.logged===true){

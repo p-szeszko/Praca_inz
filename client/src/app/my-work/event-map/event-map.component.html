@@ -34,7 +34,7 @@
         <div style="margin-left: 30px; font-size: 22px; font-weight: bold; padding-top: 10px;">{{ev.nazwa}}
         </div>
          <div  style="margin-left: 30px; margin-top: 5px; margin-bottom: 5px;" >
-           {{ev.miejsce}}, <span style="width:15px; "></span> {{getMeDate(ev.termin)}}
+           {{ev.miejsce}}, <span style="width:15px; "></span> {{getMeDate(ev.termin)}}   Zapisani uczestnicy: {{countPlayersEv(ev)}}
          </div>
       </div>
         <div style="width: 20%; height: 60px;  display: inline-flex; flex-direction: row; justify-content: space-around; align-items: center; "*ngIf="ev.organizator._id===this.loginS.user.userID"> <button mat-raised-button (click)="setToEdit(ev)" style="height: fit-content;">Edytuj</button>
@@ -75,7 +75,7 @@
 
 
      </div>
-     <ng-template #alreadyIn><h3 style="display: inline; min-height: 38px; float:right;">Jesteś już zapisany do frakcji: {{enlistedFraction}}</h3> <button mat-raised-button style=" margin:0; float:right; margin-right: 10%;" (click)="unsignFromEvent(eventToDisplay._id)">Zrezygnuj</button> </ng-template>
+     <ng-template #alreadyIn><h3 style="display: inline; min-height: 38px; ">Jesteś już zapisany do frakcji: {{enlistedFraction}}</h3> <button mat-raised-button style=" margin:0; float:right; margin-right: 10%;" (click)="unsignFromEvent(eventToDisplay._id)">Zrezygnuj</button> </ng-template>
      </div>
     <div class="event-limits">
       <div  *ngFor="let limit of eventToDisplay.limity; let i=index"><div style="min-height: 40px; "><div style="display: inline; min-width:150px; height: 100%;"><h3 style="display: inline;">{{replicas[i]}}:</h3></div><span style="display: inline-block; width: 30px;"></span><h3 style="display: inline">{{limit}}</h3></div> <mat-divider ></mat-divider> </div>
