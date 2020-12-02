@@ -93,7 +93,7 @@ export class LocationsListComponent implements OnInit {
         "name": "FontAwesome",
         "copyright": "SIL OFL 1.1",
         "prefix": "fa"
-      }, {"fas fa-warning": "\uf071", "fas fa-crosshair": "\uf05b", "fas fa-fire":"\uf06d", "fas fa-flag":"\uf024", "fa-plus-circle":"\uf055" });
+      }, {"fas fa-warning": "\uf071", "fas fa-crosshair": "\uf05b", "fas fa-fire":"\uf06d", "fas fa-flag":"\uf041", "fa-plus-circle":"\uf055" });
     this.popup = new Popup ({
       popupClass: "default anim", // "tooltips", "warning" "black" "default", "tips", "shadow",
       closeBox: true,
@@ -150,7 +150,7 @@ export class LocationsListComponent implements OnInit {
               form: 'none', //"hexagone",
               gradient: false,
               glyph: 'fas fa-flag',
-              fontSize: 0.65,
+              fontSize: 0.9,
               fontStyle: '',
               radius: 17,
               //offsetX: -15,
@@ -331,6 +331,8 @@ export class LocationsListComponent implements OnInit {
       this.locationS.postField(newLocation).pipe(first()).subscribe(data=> {
         newLocation._id=data.created_id;
         this.locationS.fieldsList.push(newLocation);
+        this.locationForm.reset();
+        this.locationForm.markAsPristine();
         //snackBar
         this.refreshFeatures();
       })

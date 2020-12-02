@@ -52,7 +52,7 @@
         </mat-grid-list>
       </div>
       <div style="float: left;">
-        <button  mat-raised-button color="accent" (click)="markTouchedInfo(stepper)">Dalej</button>
+        <button  mat-raised-button color="accent" (click)="markTouchedInfo(stepper)" style="float:right;">Dalej</button>
       </div>
       </form>
     </mat-step>
@@ -70,15 +70,15 @@
              <mat-form-field >
                 <input matInput type=number  placeholder="Liczba miejsc" formControlName='wielkosc' required>
              </mat-form-field>
-             <mat-checkbox color="accent" formControlname="otwarte" checked="otwarte" (change)="closeTheFraction(i,$event.checked)">Otwarte zapisy</mat-checkbox>
+
          </div>
     </div>
-    <button mat-icon-button (click)="addFraction()" style="margin:auto"><mat-icon color="accent" >add_circle</mat-icon></button>
+    <button mat-icon-button (click)="addFraction()" style="margin:auto"><mat-icon color="accent" style="float:right;">add_circle</mat-icon></button>
     </div>
   </form>
   <div style="float: left;">
-    <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
-    <button  mat-raised-button color="accent" (click)="markTouchedFractions(stepper)">Dalej</button>
+    <button  mat-raised-button color="accent" matStepperPrevious style="float:right;">Wróć</button>
+    <button  mat-raised-button color="accent" (click)="markTouchedFractions(stepper)" style="float:right;">Dalej</button>
   </div>
 </mat-step>
     <mat-step [stepControl]="myFormLimits" errorMessage="Informacje są wymagane.">
@@ -98,8 +98,8 @@
         </div>
       </form>
       <div style="float: left;">
-        <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
-        <button  mat-raised-button color="accent" (click)="markTouchedLimits(stepper)">Dalej</button>
+        <button  mat-raised-button color="accent" matStepperPrevious style="float:right;">Wróć</button>
+        <button  mat-raised-button color="accent" (click)="markTouchedLimits(stepper)" style="float:right;">Dalej</button>
       </div>
     </mat-step>
     <mat-step [stepControl]="myFormDescirption" errorMessage="Dodaj opis wydarzenia.">
@@ -111,8 +111,8 @@
         </mat-form-field>
       </form>
       <div>
-        <button  mat-raised-button color="accent" matStepperPrevious>Wróć</button>
-        <button mat-raised-button color="accent" type="submit" (click)="submit()">Zapisz</button>
+        <button  mat-raised-button color="accent" matStepperPrevious style="float:right;">Wróć</button>
+        <button mat-raised-button color="accent" type="submit" (click)="submit()" style="float:right;">Zapisz</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

@@ -102,7 +102,7 @@ export class EventServiceService {
   }
   public  getEvents(){
     //const header = new HttpHeaders().set( 'Authorization', 'Bearer ' + token);
-  const x =  this.http.get<EventASG[]>(this.url+'/api/event').pipe(catchError(this.handleError));
+  const x =  this.http.get<EventASG[]>(this.url+'/api/events').pipe(catchError(this.handleError));
   return x;
   }
 

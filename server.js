@@ -27,13 +27,7 @@ app.use(function(req, res, next) {
     next();
   });
 app.use('/api',appRoutes);
-app.get('/',(req,res) =>{
- console.log(req);
-  res.send('<h1>cos</h1>');
-} )
-app.get('/gl',(req,res)=>{
-return res.redirect('/auth/google');
-});
+
 
 mongoose.Promise=global.Promise;
 mongoose.connect('mongodb://localhost:27017/AsgApp',  { useNewUrlParser: true,useUnifiedTopology: true },function (err){

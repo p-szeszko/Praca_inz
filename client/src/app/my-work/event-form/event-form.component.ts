@@ -28,7 +28,7 @@ export class EventFormComponent implements OnInit{
   @Output('refreshFeatures') refreshFeatures: EventEmitter<any> = new EventEmitter<any>();
    coord;
     day=new Date().getDate();
-    month = new Date().getMonth()+1;
+    month = new Date().getMonth();
     year= new Date().getFullYear();
     minDate;
     replicas = ["Karabiny snajperskie", "Karabiny wyborowe", "Karabiny wsparcia", "Karabiny szturmowe", "Bliski dystans"];
@@ -129,7 +129,7 @@ export class EventFormComponent implements OnInit{
           _id:'',
           organizator: {_id: this.loginS.user.userID, imie: this.loginS.user.name},
           nazwa: this.myFormInfo.value.nazwa,
-          termin: this.myFormInfo.value.termin.getFullYear()+"-"+this.myFormInfo.value.termin.getMonth()+"-"+this.myFormInfo.value.termin.getDate(),
+          termin: this.myFormInfo.value.termin.getFullYear()+"-"+Number(this.myFormInfo.value.termin.getMonth()+Number(1))+"-"+this.myFormInfo.value.termin.getDate(),
           wsp: String(this.wsp),
           miejsce: this.myFormInfo.value.miejsce,
           oplata: this.myFormInfo.value.oplata,

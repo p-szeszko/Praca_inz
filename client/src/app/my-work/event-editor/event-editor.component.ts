@@ -26,7 +26,7 @@ import { MatStepper } from '@angular/material/stepper';
 export class EventEditorComponent implements OnInit{
   @Input() ev: EventASG;
     day=new Date().getDate();
-    month = new Date().getMonth()+1;
+    month = new Date().getMonth();
     year= new Date().getFullYear();
     minDate;
     editedEv;
@@ -62,7 +62,7 @@ export class EventEditorComponent implements OnInit{
       wspe: [{value: coorDigital, disabled: true}, Validators.required],
       oplata: 0,
   });
-    this.minDate = Date.parse(this.editedEv.termin);
+   // this.minDate = Date.parse(this.editedEv.termin);
     this.FormFractions = this.fb.group({
       frakcje:this.fb.array([this.fb.group({strona:''})])
     });
@@ -150,11 +150,11 @@ export class EventEditorComponent implements OnInit{
           _id:this.editedEv._id,
           organizator: this.editedEv.organizator,
           nazwa: this.myFormInfo.value.nazwa,
-          termin:this.myFormInfo.value.termin.getFullYear() +"-"+this.myFormInfo.value.termin.getMonth()+"-"+this.myFormInfo.value.termin.getDate(),
+          termin:this.myFormInfo.value.termin.getFullYear() +"-"+Number(this.myFormInfo.value.termin.getMonth()+Number(1))+"-"+this.myFormInfo.value.termin.getDate(),
           wsp: String(this.editedEv.wsp),
-          miejsce: this.myFormInfo.value.miejsce,
+          miejsce: this.editedEv.miejsce,
           oplata: this.myFormInfo.value.oplata,
-          rodzaj: this.myFormInfo.value.rodzaj,
+          rodzaj: this.editedEv.rodzaj,
           limity: limits,
           roznica: 0,
           frakcje: arr,

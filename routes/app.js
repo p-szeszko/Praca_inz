@@ -41,12 +41,7 @@ const checkToken = (req, res, next) => {
             res.sendStatus(403)
         }
     }
-router.post('/authenticate', function(res,req){
- 
-});
-router.post('/refreshToken',checkToken,function(req,res){
-    const token = jwt.sign({userID:req.user.googleID},'POPOLUPO',{expiresIn:'24h'} )
-});
+
 
 router.get('/user',checkToken,function(req,res){
     
@@ -82,18 +77,21 @@ router.post('/event', function(req,res){
     frakcje:req.body.frakcje,
     opis:req.body.opis
 
-    }).save((err, ev)=>{
-        if(err===true)
+    }).save((err, event)=>{
+        if(err!==null)
         {
+           console.log(err);
             res.status(400).json({success:false, message:"Wystąpił błąd", created_id:''});
         }
         else{
-        res.status(200).json({success:true,message:'Utworzono wydarzenie', created_id:ev._id});
+            
+            console.log(err);
+        res.status(200).json({success:true,message:'Utworzono wydarzenie', created_id: event._id});
         }
     });
    
 })
-router.get('/event',function(req,res){
+router.get('/events',function(req,res){
     var date = new Date();
     date.setDate(date.getDate()-1);
     date.setHours(23,59,59);
